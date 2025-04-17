@@ -178,7 +178,7 @@ public class Maze {
     /**
      * ToString implementation.
      * Formatted as a list of coordinates followed by their connections
-     * {[{(x, y), [NORTH, SOUTH, ... ]}, ...]}
+     * {[((x, y), [NORTH, SOUTH, ... ]), ...]}
      *
      * @return the string representation of the maze
      */
@@ -188,7 +188,7 @@ public class Maze {
         sb.append("{");
         for (Integer y = 0; y < width + 1; y++) {
             for (Integer x = 0; x < height + 1; x++) {
-                sb.append("({").append(x).append(", ").append(y).append("}, [");
+                sb.append("((").append(x).append(", ").append(y).append("), [");
                 for (Direction direction : Direction.values()) {
                     if (hasConnection(x, y, direction)) {
                         sb.append(direction).append(", ");

@@ -20,7 +20,7 @@ class MazeTest {
         Maze maze = new Maze(2, 2);
         maze.connect(0, 0, Direction.NORTH);
 
-        String expected = String.format("{({0, 0}, [NORTH]), ({1, 0}, []), ({0, 1}, [SOUTH]), ({1, 1}, [])}");
+        String expected = String.format("{((0, 0), [NORTH]), ((1, 0), []), ((0, 1), [SOUTH]), ((1, 1), [])}");
 
         assertEquals(expected, maze.toString());
     }
