@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class TestMain {
-    private Logger logger = LoggerFactory.getLogger(TestMain.class);
+public class MainTest {
+    private Logger logger = LoggerFactory.getLogger(MainTest.class);
 
     @Test
     public void testTest() {

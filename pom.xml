@@ -166,11 +166,6 @@
                     <phase>test</phase>
                 </execution>
             </executions>
-            <configuration>
-                <includes>
-                    <include>**/TestMain.java</include>
-                </includes>
-            </configuration>
         </plugin>
     </plugins>
 </build>
