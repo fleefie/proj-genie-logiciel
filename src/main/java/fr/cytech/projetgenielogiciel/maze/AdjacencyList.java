@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -26,7 +27,9 @@ import lombok.NoArgsConstructor;
  */
 
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public final class AdjacencyList {
+    @EqualsAndHashCode.Include
     private final Map<Integer, List<Integer>> adjacencyList = new HashMap<>();
 
     /**

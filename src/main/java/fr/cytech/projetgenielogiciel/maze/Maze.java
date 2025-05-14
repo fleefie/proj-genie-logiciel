@@ -14,12 +14,14 @@ public class Maze {
      * The width of the maze.
      */
     @Getter
+    @EqualsAndHashCode.Include
     private final Integer width;
 
     /**
      * The height of the maze.
      */
     @Getter
+    @EqualsAndHashCode.Include
     private final Integer height;
 
     /**
@@ -38,6 +40,7 @@ public class Maze {
      * an algorithm needs it and it is preferable to not rely on topology.
      */
     @Getter
+    @EqualsAndHashCode.Include
     private final AdjacencyList adjacencyList = new AdjacencyList();
 
     /**

@@ -52,4 +52,26 @@ public enum Direction {
             case WEST -> 0;
         };
     }
+
+    /**
+     * Create a direction from a vector.
+     */
+    public static Direction fromVector(Integer x, Integer y) {
+        if (x == y)
+            throw new IllegalArgumentException("A direction may not be diagonal or null");
+
+        if (x != -1 && x != 1 && x != 0 && y != 1 && y != -1 && y != 0)
+            throw new IllegalArgumentException("A direction may only contain unit vectors");
+
+        if (x == 1)
+            return Direction.EAST;
+        if (x == -1)
+            return Direction.WEST;
+        if (y == 1)
+            return Direction.NORTH;
+        if (y == -1)
+            return Direction.SOUTH;
+
+        throw new IllegalArgumentException("Bad direction vector arguments");
+    }
 }
