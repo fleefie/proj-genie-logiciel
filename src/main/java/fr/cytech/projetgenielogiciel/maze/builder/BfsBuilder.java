@@ -5,18 +5,19 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Deque;
 import java.util.Random;
 import java.util.Set;
-import java.util.Stack;
 
 import fr.cytech.projetgenielogiciel.maze.Direction;
 import fr.cytech.projetgenielogiciel.maze.Maze;
 
 /**
- * Implements a perfect maze builder using a DFS algorithm.
+ * Implements a perfect maze builder using a BFS algorithm.
  */
-public class DfsBuilder implements IBuilder {
+public class BfsBuilder implements IBuilder {
     /**
      * Record for holding a cell's position.
      */
@@ -39,11 +40,9 @@ public class DfsBuilder implements IBuilder {
     private Position currentCell;
 
     /**
-     * The stack of cells.
-     * We're writing the DFS procedurally and not recursively,
-     * so we need this.
+     * The queue of cells.
      */
-    private final Stack<Position> positionStack = new Stack<Position>();
+    private final Deque<Position> positionQueue = new LinkedList<Position>();
 
     /**
      * Random generator.
@@ -63,10 +62,13 @@ public class DfsBuilder implements IBuilder {
      * @param starty starting Y position.
      * @param seed   seed for the RNG
      */
-    public DfsBuilder(Maze maze, Integer startx, Integer starty, Integer seed) {
+    public BfsBuilder(Maze maze, Integer startx, Integer starty, Integer seed) {
         this.maze = maze;
         this.currentCell = new Position(startx, starty);
         this.rand = new Random(seed);
+        // Needed here due to how the step() function has to work
+        this.positionQueue.offerFirst(currentCell);
+        this.visited.add(currentCell);
     }
 
     /**
@@ -76,7 +78,7 @@ public class DfsBuilder implements IBuilder {
      */
     @Override
     public Iterator<Boolean> iterator() {
-        return new DfsIterator();
+        return new BfsIterator();
     };
 
     /**
@@ -104,9 +106,9 @@ public class DfsBuilder implements IBuilder {
 
     /**
      * INTERNAL USE ONLY!
-     * Iterator implementation for the DFS. Required to avoid self-referencing.
+     * Iterator implementation for the BFS. Required to avoid self-referencing.
      */
-    private class DfsIterator implements Iterator<Boolean> {
+    private class BfsIterator implements Iterator<Boolean> {
         @Override
         public boolean hasNext() {
             return !finished;
@@ -122,52 +124,54 @@ public class DfsBuilder implements IBuilder {
     }
 
     /**
-     * Executes a step of the DFS.
+     * Executes a step of the BFS.
      * A step is considered over once we found a new cell to visit.
+     *
+     * @return whether a step could be executed.
+     */
+    /**
+     * Executes a step of the BFS.
+     * A step is considered over once we process the next cell in the queue.
      *
      * @return whether a step could be executed.
      */
     @Override
     public Boolean step() {
-        visited.add(currentCell);
 
-        // If the current cell has valid neighbors, try moving to one of them
-        if (hasValidTargets(currentCell)) {
-            List<Direction> directions = new ArrayList<Direction>(Arrays.asList(
-                    Direction.NORTH,
-                    Direction.SOUTH,
-                    Direction.EAST,
-                    Direction.WEST));
-            Collections.shuffle(directions, rand); // inefficient, but clean
+        currentCell = positionQueue.pollFirst();
 
-            for (Direction direction : directions) {
-                Position target = new Position(
-                        currentCell.x() + direction.getX(),
-                        currentCell.y() + direction.getY());
+        // Check all valid neighbors and add them to the queue
+        List<Direction> directions = new ArrayList<>(Arrays.asList(
+                Direction.NORTH,
+                Direction.SOUTH,
+                Direction.EAST,
+                Direction.WEST));
+        Collections.shuffle(directions, rand);
 
-                if (isValidTarget(target)) {
-                    // Connect the maze and move to the target cell
-                    maze.connect(currentCell.x(), currentCell.y(), direction);
-                    positionStack.push(target);
-                    currentCell = target;
-                    return true;
-                }
+        for (Direction direction : directions) {
+            Position target = new Position(
+                    currentCell.x() + direction.getX(),
+                    currentCell.y() + direction.getY());
+
+            if (isValidTarget(target)) {
+                // Connect the maze and enqueue the target cell
+                maze.connect(currentCell.x(), currentCell.y(), direction);
+                positionQueue.offerLast(target);
+                visited.add(target);
             }
         }
 
-        // If no valid neighbors, backtrack
-        positionStack.pop();
-        if (positionStack.isEmpty()) {
-            this.finished = true; // We should be done here?
+        // If the queue is empty, we're done here
+        if (positionQueue.isEmpty()) {
+            this.finished = true;
             return false;
-        } else {
-            currentCell = positionStack.peek();
-            return true;
         }
+
+        return true;
     }
 
     /**
-     * Checks if a cell is a valid target for the DFS.
+     * Checks if a cell is a valid target for the BFS.
      * 
      * @param target the position of the target cell.
      */
@@ -175,17 +179,5 @@ public class DfsBuilder implements IBuilder {
         return (target.x() >= 0 && target.x() <= maze.getWidth()
                 && target.y() >= 0 && target.y() <= maze.getHeight()
                 && !visited.contains(target));
-    }
-
-    /**
-     * Checks if the position has any valid targets.
-     *
-     * @param target the position of the cell to check.
-     */
-    private Boolean hasValidTargets(Position cell) {
-        return (isValidTarget(new Position(cell.x() + 1, cell.y()))
-                || isValidTarget(new Position(cell.x() - 1, cell.y()))
-                || isValidTarget(new Position(cell.x(), cell.y() + 1))
-                || isValidTarget(new Position(cell.x(), cell.y() - 1)));
     }
 }
