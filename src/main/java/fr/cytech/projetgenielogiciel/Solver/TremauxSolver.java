@@ -1,5 +1,4 @@
 package fr.cytech.projetgenielogiciel.Solver;
-
 import fr.cytech.projetgenielogiciel.maze.Cell;
 import fr.cytech.projetgenielogiciel.maze.Maze;
 
@@ -54,7 +53,7 @@ public class TremauxSolver implements ISolver {
     // ???
     public boolean isFinished(){
         return false;
-    }// Return if it is solved or not (litteraly getSolved)
+    }
 
     public float heuristic(Cell c){
         return 0;

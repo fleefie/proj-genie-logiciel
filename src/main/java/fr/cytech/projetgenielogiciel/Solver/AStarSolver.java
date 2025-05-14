@@ -1,9 +1,8 @@
 package fr.cytech.projetgenielogiciel.Solver;
-
 import fr.cytech.projetgenielogiciel.maze.Cell;
 import fr.cytech.projetgenielogiciel.maze.Maze;
 
-public class AStartSolver implements ISolver{
+public class AStarSolver implements ISolver{
     protected Maze laby;
     protected boolean solved;
 
@@ -12,7 +11,7 @@ public class AStartSolver implements ISolver{
      * @param lab take a maze that will be solved step by step
      *
      */
-    public AStartSolver(Maze lab){
+    public AStarSolver(Maze lab){
         try{
             if(lab == null){
                 throw new IllegalArgumentException("labyrinthe null");

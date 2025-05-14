@@ -1,4 +1,5 @@
 package fr.cytech.projetgenielogiciel.Solver;
+
 import fr.cytech.projetgenielogiciel.maze.Cell;
 
 interface ISolver {
