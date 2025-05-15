@@ -125,12 +125,6 @@ public class BfsBuilder implements IBuilder {
 
     /**
      * Executes a step of the BFS.
-     * A step is considered over once we found a new cell to visit.
-     *
-     * @return whether a step could be executed.
-     */
-    /**
-     * Executes a step of the BFS.
      * A step is considered over once we process the next cell in the queue.
      *
      * @return whether a step could be executed.
