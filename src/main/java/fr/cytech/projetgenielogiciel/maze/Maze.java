@@ -218,7 +218,7 @@ public class Maze {
      * Connections are displayed between cells, and for the sake of simplicity
      * of implementation, are displayed in the leftmost position for vertical
      * connections, relative to the size of the ID.
-     * Unidirectional connections are represented by '>', 'v', '^' and '<'.
+     * Unidirectional connections are represented by arrows.
      * 
      * Example:
      * <code>
