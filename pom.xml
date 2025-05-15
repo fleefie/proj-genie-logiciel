@@ -31,6 +31,18 @@
         <version>21.0.7</version>
         <scope>compile</scope>
     </dependency>
+    <!-- JavaFX Modules -->
+    <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-controls</artifactId>
+        <version>21.0.7</version>
+    </dependency>
+    <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-graphics</artifactId>
+        <version>21.0.7</version>
+    </dependency>
+
 
     <!-- This prevents me from going insane -->
     <dependency>
@@ -167,6 +179,17 @@
                 </execution>
             </executions>
         </plugin>
+
+        <!-- JavaFX plugin, used for a few things -->
+        <plugin>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-maven-plugin</artifactId>
+            <version>0.0.8</version>
+            <configuration>
+                <mainClass>${mainClass}</mainClass>
+            </configuration>
+        </plugin>
+
     </plugins>
 </build>
 </project>
