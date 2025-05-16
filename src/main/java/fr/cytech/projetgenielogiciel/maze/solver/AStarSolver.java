@@ -1,4 +1,4 @@
-package fr.cytech.projetgenielogiciel.Solver;
+package fr.cytech.projetgenielogiciel.maze.solver;
 
 import fr.cytech.projetgenielogiciel.maze.Cell;
 import fr.cytech.projetgenielogiciel.maze.Maze;
@@ -10,7 +10,7 @@ public class AStarSolver implements ISolver {
     protected boolean solved;
     protected Map<Integer, Integer> gScore; // Distance from the start
     protected Map<Integer, Integer> fScore; // Total distance estimation (g + h)
-    // protected Map<Integer, Integer> cameFrom; // To build the path
+    protected Map<Integer, Integer> cameFrom; // To build the path
     protected PriorityQueue<Cell> openSet; // Cells who need to be checked
     protected Cell start;
     protected Cell end;
@@ -21,7 +21,7 @@ public class AStarSolver implements ISolver {
      * @param lab take a maze that will be solved step by step
      *
      */
-    public AStarSolver(Maze lab) {
+    public AStarSolver(Maze lab, Cell start, Cell end) {
         try {
             if (lab == null) {
                 throw new IllegalArgumentException("labyrinthe null || case null");
@@ -30,9 +30,11 @@ public class AStarSolver implements ISolver {
             this.solved = false;
             this.gScore = new HashMap<>(); // Distance start and actual pos
             this.fScore = new HashMap<>(); // Distance gScore + heuristic
-            // this.cameFrom = new HashMap<>();
+            this.cameFrom = new HashMap<>();
             this.openSet = new PriorityQueue<>(
                     Comparator.comparingInt(c -> fScore.getOrDefault(c.getId(), Integer.MAX_VALUE)));
+            this.start = start;
+            this.end = end;
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -98,14 +100,12 @@ public class AStarSolver implements ISolver {
      * @param s start of the maze
      * @param f end of the maze
      */
-    public void solve(Cell s, Cell f) {
-        this.start = s;
-        this.end = f;
-        this.solved = false;
+    public void solve() {
         this.gScore.clear();
         this.fScore.clear();
         // this.cameFrom.clear();
         this.openSet.clear();
+        new Map
 
         // Initialization
         gScore.put(s.getId(), 0);
@@ -122,7 +122,7 @@ public class AStarSolver implements ISolver {
 
         Cell current = f;
         while (!current.equals(s)) {
-            current = current.getParentId();
+            current = findCellById(current.getParentId());
             current.isInPath();
         }
 

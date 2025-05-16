@@ -1,7 +1,12 @@
 package fr.cytech.projetgenielogiciel.maze;
 
+import fr.cytech.projetgenielogiciel.maze.solver.AStarSolver;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Map;
+import java.util.Stack;
 
 /**
  * Class representing a maze.
@@ -42,6 +47,13 @@ public class Maze {
     @Getter
     @EqualsAndHashCode.Include
     private final AdjacencyList adjacencyList = new AdjacencyList();
+
+    @Getter
+    @Setter
+    private Map<Integer, Boolean> visited;
+
+    @Getter
+    private final Stack<Cell> path = new Stack<Cell>();
 
     /**
      * Constructor for a Maze, without specifying the cells.
