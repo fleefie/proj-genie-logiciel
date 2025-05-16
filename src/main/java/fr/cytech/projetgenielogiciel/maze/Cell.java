@@ -23,16 +23,7 @@ public class Cell {
     private boolean inPath = false;
     @Getter
     @Setter
-    private Integer fatherId;
-
-
-    public void isVisited(){
-       this.visited=true;
-    }
-
-    public void isInPath(){
-        this.inPath=true;
-    }
+    private Integer parentId;
 
     /**
      * The ID of the cell.
