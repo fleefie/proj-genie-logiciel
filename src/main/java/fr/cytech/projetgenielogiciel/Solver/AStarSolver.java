@@ -9,7 +9,7 @@ public class AStarSolver implements ISolver{
     protected boolean solved;
     protected Map<Integer, Integer> gScore; // Distance from the start
     protected Map<Integer, Integer> fScore; // Total distance estimation (g + h)
-    protected Map<Integer, Integer> cameFrom; // To build the path
+    //protected Map<Integer, Integer> cameFrom; // To build the path
     protected PriorityQueue<Cell> openSet; // Cells who need to be checked
     protected Cell start;
     protected Cell end;
@@ -22,13 +22,13 @@ public class AStarSolver implements ISolver{
     public AStarSolver(Maze lab){
         try{
             if(lab == null){
-                throw new IllegalArgumentException("labyrinthe null");
+                throw new IllegalArgumentException("labyrinthe null || case null");
             }
             this.laby = lab;
             this.solved = false;
-            this.gScore = new HashMap<>();
-            this.fScore = new HashMap<>();
-            this.cameFrom = new HashMap<>();
+            this.gScore = new HashMap<>(); //Distance start and actual pos
+            this.fScore = new HashMap<>(); //Distance gScore + heuristic
+            //this.cameFrom = new HashMap<>();
             this.openSet = new PriorityQueue<>(Comparator.comparingInt(c -> fScore.getOrDefault(c.getId(), Integer.MAX_VALUE)));
         }
         catch(Exception e){
@@ -59,8 +59,10 @@ public class AStarSolver implements ISolver{
      * @param current actual position in the maze
      */
     public void step(Cell current){
+        current.isVisited();
         if (current.equals(end)) {
             solved = true;
+            current.isInPath();
             return;
         }
 
@@ -68,11 +70,14 @@ public class AStarSolver implements ISolver{
             Cell neighbor = findCellById(neighborId);
             if (neighbor == null) continue;
 
+            neighbor.setfatherId(current.getId());
+
             // The distance between two adjacent cells is 1
             int tentativeGScore = gScore.getOrDefault(current.getId(), Integer.MAX_VALUE) + 1;
 
             if (tentativeGScore < gScore.getOrDefault(neighbor.getId(), Integer.MAX_VALUE)) {
-                cameFrom.put(neighbor.getId(), current.getId());
+                current.setFather(neighbor.getId());
+                //cameFrom.put(neighbor.getId(), current.getId());
                 gScore.put(neighbor.getId(), tentativeGScore);
                 fScore.put(neighbor.getId(), tentativeGScore + (int) heuristic(neighbor));
 
@@ -93,18 +98,28 @@ public class AStarSolver implements ISolver{
         this.solved = false;
         this.gScore.clear();
         this.fScore.clear();
-        this.cameFrom.clear();
+        //this.cameFrom.clear();
         this.openSet.clear();
 
         // Initialization
         gScore.put(s.getId(), 0);
         fScore.put(s.getId(), (int)heuristic(s));
-        openSet.add(s);
+        openSet.add(s); //Add in queue
 
         while (!openSet.isEmpty() && !solved) {
             Cell current = openSet.poll();
             step(current);
+
         }
+
+        //la on fait le chemin
+
+        Cell current = f;
+        while(!current.equals(s)){
+            current = current.getfatherId();
+            current.isInPath();
+        }
+
     }
 
     /**

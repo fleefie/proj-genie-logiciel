@@ -17,6 +17,22 @@ public class Cell {
     @Getter
     @Setter
     static private Integer totalCellCount = 0;
+    @Getter
+    private boolean visited = false;
+    @Getter
+    private boolean inPath = false;
+    @Getter
+    @Setter
+    private Integer fatherId;
+
+
+    public void isVisited(){
+       this.visited=true;
+    }
+
+    public void isInPath(){
+        this.inPath=true;
+    }
 
     /**
      * The ID of the cell.
