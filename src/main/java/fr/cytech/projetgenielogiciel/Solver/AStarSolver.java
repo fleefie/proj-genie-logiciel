@@ -2,18 +2,21 @@ package fr.cytech.projetgenielogiciel.Solver;
 
 import fr.cytech.projetgenielogiciel.maze.Cell;
 import fr.cytech.projetgenielogiciel.maze.Maze;
+import fr.cytech.projetgenielogiciel.maze.builder.DfsBuilder;
+
 
 import java.util.*;
 
 public class AStarSolver implements ISolver {
     protected Maze laby;
-    protected boolean solved;
+    protected boolean solved=false;
     protected Map<Integer, Integer> gScore; // Distance from the start
     protected Map<Integer, Integer> fScore; // Total distance estimation (g + h)
-    // protected Map<Integer, Integer> cameFrom; // To build the path
     protected PriorityQueue<Cell> openSet; // Cells who need to be checked
+    private final Stack<Cell> cameFrom = new Stack<Cell>(); //To build the path
     protected Cell start;
     protected Cell end;
+    protected Cell current;
 
     /**
      * Creator of Solver class
@@ -21,11 +24,14 @@ public class AStarSolver implements ISolver {
      * @param lab take a maze that will be solved step by step
      *
      */
-    public AStarSolver(Maze lab) {
+    public AStarSolver(Maze lab, Cell start, Cell end) {
         try {
             if (lab == null) {
                 throw new IllegalArgumentException("labyrinthe null || case null");
             }
+            this.current = start;
+            this.start = start;
+            this.end = end;
             this.laby = lab;
             this.solved = false;
             this.gScore = new HashMap<>(); // Distance start and actual pos
@@ -59,80 +65,125 @@ public class AStarSolver implements ISolver {
     /**
      * Does one step from the cell c
      * 
-     * @param current actual position in the maze
+     *
      */
-    public void step(Cell current) {
-        current.isVisited();
+    public Boolean step() {
+        current.setColor(Colors.Blue);
         if (current.equals(end)) {
             solved = true;
-            current.isInPath();
-            return;
+            cameFrom.add(current);
+            return true;
         }
-
+        Boolean isntStuck = false;
         for (Integer neighborId : laby.getAdjacencyList().getNeighbors(current.getId())) {
             Cell neighbor = findCellById(neighborId);
             if (neighbor == null)
                 continue;
 
-            neighbor.setParentId(current.getId());
-
-            // The distance between two adjacent cells is 1
-            int tentativeGScore = gScore.getOrDefault(current.getId(), Integer.MAX_VALUE) + 1;
-
-            if (tentativeGScore < gScore.getOrDefault(neighbor.getId(), Integer.MAX_VALUE)) {
-                current.setParentId(neighbor.getId());
-                // cameFrom.put(neighbor.getId(), current.getId());
-                gScore.put(neighbor.getId(), tentativeGScore);
-                fScore.put(neighbor.getId(), tentativeGScore + (int) heuristic(neighbor));
-
-                if (!openSet.contains(neighbor)) {
-                    openSet.add(neighbor);
+            if(neighbor.getColor()!=Colors.White){
+                // verification si le chemin est "plus court"
+                Integer ftemp = fScore.getValue(neighbor.getId());
+                if(ftemp > fScore.getValue(current.getId())){
+                    Cell actual = cameFrom.pop();
+                    while(!actual.equals(neighbor)){
+                        actual = cameFrom.pop();
+                    }
+                    cameFrom.add(current);
                 }
             }
+            else{
+                isntStuck = true;
+
+                int tentativeGScore = gScore.getOrDefault(current.getId(), Integer.MAX_VALUE) + 1;
+
+                if (tentativeGScore < gScore.getOrDefault(neighbor.getId(), Integer.MAX_VALUE)) {
+                    current.setParentId(neighbor.getId());
+                    // cameFrom.put(neighbor.getId(), current.getId());
+                    gScore.put(neighbor.getId(), tentativeGScore);
+                    fScore.put(neighbor.getId(), tentativeGScore + (int) heuristic(neighbor));
+
+                    if (!openSet.contains(neighbor)) {
+                        openSet.add(neighbor);
+                    }
+                }
+            }
+
         }
+        if(!isntStuck){
+            current = cameFrom.pop();
+        }
+        else{
+            cameFrom.add(current);
+        }
+        return true;
     }
 
     /**
      * Solve the maze by starting from s to f
-     * 
-     * @param s start of the maze
-     * @param f end of the maze
      */
-    public void solve(Cell s, Cell f) {
-        this.start = s;
-        this.end = f;
+    public Boolean solve() {
         this.solved = false;
         this.gScore.clear();
         this.fScore.clear();
         // this.cameFrom.clear();
         this.openSet.clear();
+        if(current == end){ //To verif if we need to atleast do 1 step
+            return false;
+        }
 
         // Initialization
-        gScore.put(s.getId(), 0);
-        fScore.put(s.getId(), (int) heuristic(s));
-        openSet.add(s); // Add in queue
+        gScore.put(start.getId(), 0);
+        fScore.put(start.getId(), (int) heuristic(start));
+        openSet.add(start); // Add in queue
 
         while (!openSet.isEmpty() && !solved) {
             Cell current = openSet.poll();
-            step(current);
+            step();
 
         }
-
-        // la on fait le chemin
-
-        Cell current = f;
-        while (!current.equals(s)) {
-            current = current.getParentId();
-            current.isInPath();
+        if(cameFrom.contains(end)){ //If we got a solution
+            while (!cameFrom.isEmpty()) {
+                Cell current = cameFrom.pop();
+                current.setColor(Colors.Green);
+            }
+            return true;
         }
-
+        else{ //We dont have a solution
+            return false;
+        }
     }
+
+    //Setup les trucs de bases
+    private class HeuristicIterator implements Iterator<Boolean> {
+        @Override
+        public boolean hasNext() {
+            return !solved;
+        }
+
+        @Override
+        public Boolean next() {
+            if (solved) {
+                return false;
+            }
+            return step();
+        }
+    }
+    /**
+     * Create an iterator for the solver.
+     *
+     * @return The iterator.
+     */
+    @Override
+    public Iterator<Boolean> iterator() {
+        return new HeuristicIterator();
+    };
 
     /**
      *
      * @return true when it's finished and false if it's not
      */
-    public boolean isFinished() {
+
+    public Boolean isFinished() {
         return solved;
     }
 

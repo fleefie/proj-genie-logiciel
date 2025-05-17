@@ -1,5 +1,6 @@
 package fr.cytech.projetgenielogiciel.maze;
 
+import fr.cytech.projetgenielogiciel.Solver.Colors;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,12 +19,11 @@ public class Cell {
     @Setter
     static private Integer totalCellCount = 0;
     @Getter
-    private boolean visited = false;
-    @Getter
-    private boolean inPath = false;
-    @Getter
     @Setter
     private Integer parentId;
+    @Getter
+    @Setter
+    private Colors color =Colors.White;
 
     /**
      * The ID of the cell.
