@@ -69,8 +69,8 @@ public class AStarSolver implements ISolver {
         current = openSet.poll();
         current.setColor(Color.RED);
         System.out.println("actuel "+current);
-        System.out.println(fScore.get(current.getId()));
-        System.out.println(gScore.get(current.getId()));
+        System.out.println("fScore "+fScore.get(current.getId()));
+        System.out.println("gScore "+gScore.get(current.getId()));
         if(current.getId()==end.getId()){
             System.out.println("FINISHED");
             solved = true;
