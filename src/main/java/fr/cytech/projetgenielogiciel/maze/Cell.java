@@ -18,12 +18,13 @@ public class Cell {
     @Getter
     @Setter
     static private Integer totalCellCount = 0;
+
+    /**
+     * The color of the cell, used for various display needs
+     */
     @Getter
     @Setter
-    private Integer parentId;
-    @Getter
-    @Setter
-    private Color color =Color.WHITE;
+    private Color color = Color.WHITE;
 
     /**
      * The ID of the cell.

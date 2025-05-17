@@ -1,6 +1,7 @@
 package fr.cytech.projetgenielogiciel;
 
 import fr.cytech.projetgenielogiciel.maze.Maze;
+import fr.cytech.projetgenielogiciel.maze.builder.BfsBuilder;
 import fr.cytech.projetgenielogiciel.maze.builder.DfsBuilder;
 import fr.cytech.projetgenielogiciel.maze.builder.IBuilder;
 import fr.cytech.projetgenielogiciel.ui.MazeView;
@@ -34,7 +35,7 @@ public class Main extends Application {
         // algorithmChoice.setValue("DFS");
 
         Button generateButton = new Button("Step ahead");
-        IBuilder builder = new DfsBuilder(maze, 0, 0, 9999);
+        IBuilder builder = new BfsBuilder(maze, 0, 0, 9999);
 
         generateButton.setOnAction(e -> {
             builder.step();
