@@ -1,8 +1,8 @@
-package fr.cytech.projetgenielogiciel.Solver;
+package fr.cytech.projetgenielogiciel.maze.solver;
 
 import fr.cytech.projetgenielogiciel.maze.Cell;
 import fr.cytech.projetgenielogiciel.maze.Maze;
-import fr.cytech.projetgenielogiciel.maze.builder.DfsBuilder;
+import javafx.scene.paint.Color;
 
 
 import java.util.*;
@@ -68,7 +68,7 @@ public class AStarSolver implements ISolver {
      *
      */
     public Boolean step() {
-        current.setColor(Colors.Blue);
+        current.setColor(Color.BLUE);
         if (current.equals(end)) {
             solved = true;
             cameFrom.add(current);
@@ -80,7 +80,7 @@ public class AStarSolver implements ISolver {
             if (neighbor == null)
                 continue;
 
-            if(neighbor.getColor()!=Colors.White){
+            if(neighbor.getColor()!=Color.WHITE){
                 // verification si le chemin est "plus court"
                 Integer ftemp = fScore.getValue(neighbor.getId());
                 if(ftemp > fScore.getValue(current.getId())){
@@ -144,7 +144,7 @@ public class AStarSolver implements ISolver {
         if(cameFrom.contains(end)){ //If we got a solution
             while (!cameFrom.isEmpty()) {
                 Cell current = cameFrom.pop();
-                current.setColor(Colors.Green);
+                current.setColor(Color.GREEN);
             }
             return true;
         }

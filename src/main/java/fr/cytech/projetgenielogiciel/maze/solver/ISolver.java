@@ -6,15 +6,21 @@ import java.util.Iterator;
 
 public interface ISolver extends Iterable<Boolean> {
     /**
-     * Runs a single step of the building process.
+     * Runs a single step of the solving process.
      *
      * @return Whether a step could be processed
      */
     public Boolean step();
 
+    /**
+     * Runs the entire rest of the solving process.
+     *
+     * @return Whether the maze could be fully solved.
+     */
+    public Boolean solve();
 
     /**
-     * Returns an iterator of the building steps.
+     * Returns an iterator of the solve steps.
      *
      * @return An interator returning whether each step iteration
      *         was able to be processed
@@ -22,24 +28,10 @@ public interface ISolver extends Iterable<Boolean> {
     public Iterator<Boolean> iterator();
 
     /**
-     * Returns whether the builder is done building or if there is
+     * Returns whether the solver is done solving or if there is
      * still work to be done.
      *
-     * @return Whether the builder has finished building
+     * @return Whether the solver has finished building
      */
     public Boolean isFinished();
-
-    //no need for toString & equals
-    /** Does one step from the cell c
-     * @param c actual position in the maze
-     */
-    public void step(Cell c);
-
-    /** Solve the maze by starting from s to f
-     * @param s start of the maze
-     * @param f end of the maze
-     */
-    public void solve(Cell s,Cell f);
-
-
 }

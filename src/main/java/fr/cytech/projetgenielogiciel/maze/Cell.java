@@ -1,6 +1,6 @@
 package fr.cytech.projetgenielogiciel.maze;
 
-import fr.cytech.projetgenielogiciel.Solver.Colors;
+import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,7 +23,7 @@ public class Cell {
     private Integer parentId;
     @Getter
     @Setter
-    private Colors color =Colors.White;
+    private Color color =Color.WHITE;
 
     /**
      * The ID of the cell.
