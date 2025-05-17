@@ -70,8 +70,8 @@ public class AStarSolver implements ISolver {
 
             if(neighbor.getColor()!=Color.WHITE){
                 // verification si le chemin est "plus court"
-                Integer ftemp = fScore.get(neighbor.getId());
-                if(ftemp > fScore.get(current.getId())){
+                Integer fTemp = fScore.get(neighbor.getId());
+                if(fTemp > fScore.get(current.getId())){
                     Cell actual = cameFrom.pop();
                     while(!actual.equals(neighbor)){
                         actual = cameFrom.pop();
@@ -127,7 +127,7 @@ public class AStarSolver implements ISolver {
             step();
 
         }
-        if(cameFrom.contains(end)){ //If we got a solution
+        if(solved){ //If we got a solution
             while (!cameFrom.isEmpty()) {
                 Cell current = cameFrom.pop();
                 current.setColor(Color.GREEN);

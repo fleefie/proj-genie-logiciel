@@ -1,10 +1,14 @@
 package fr.cytech.projetgenielogiciel.maze.solver;
 import fr.cytech.projetgenielogiciel.maze.Cell;
 import fr.cytech.projetgenielogiciel.maze.Maze;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Iterator;
 
 public class TremauxSolver implements ISolver {
+    @Getter
+    @Setter
     protected Maze laby;
     protected boolean solved;
 
@@ -26,19 +30,8 @@ public class TremauxSolver implements ISolver {
         }
     }
 
-    public Maze getLaby(){
-        return this.laby;
-    }
-
-    public void setLaby(Maze lab) {
-        if (lab != null) {
-            this.laby = lab;
-        }
-    }
-
 
     /** Does one step from the cell c
-     * @param c actual position in the maze
      */
     public Boolean step(){
         return true;
@@ -78,10 +71,6 @@ public class TremauxSolver implements ISolver {
     // ???
     public Boolean isFinished(){
         return false;
-    }
-
-    public float heuristic(Cell c){
-        return 0;
     }
 
 

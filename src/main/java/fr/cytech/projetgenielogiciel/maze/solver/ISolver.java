@@ -1,6 +1,5 @@
 package fr.cytech.projetgenielogiciel.maze.solver;
 
-import fr.cytech.projetgenielogiciel.maze.Cell;
 
 import java.util.Iterator;
 

@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 /**
  * Class representing an adjacency list.
- *
  * An adjacency list is a data structure used to represent a graph.
  * It represents this graph through only the edges between nodes.
  * Note that this is not a class to represent a full graph, this only
