@@ -1,6 +1,10 @@
 package fr.cytech.projetgenielogiciel;
 
+
 import fr.cytech.projetgenielogiciel.maze.Maze;
+import fr.cytech.projetgenielogiciel.maze.solver.ISolver;
+import fr.cytech.projetgenielogiciel.maze.solver.AStarSolver;
+import fr.cytech.projetgenielogiciel.maze.solver.TremauxSolver;
 import fr.cytech.projetgenielogiciel.maze.builder.BfsBuilder;
 import fr.cytech.projetgenielogiciel.maze.builder.DfsBuilder;
 import fr.cytech.projetgenielogiciel.maze.builder.IBuilder;
@@ -36,14 +40,20 @@ public class Main extends Application {
 
         Button generateButton = new Button("Step ahead");
         IBuilder builder = new DfsBuilder(maze, 0, 0, 9999);
+        builder.build();
+        maze.resetColors();
+
+        ISolver solver = new AStarSolver(maze, maze.getCell(0, 0),
+                maze.getCell(maze.getWidth(), maze.getHeight()));
 
         generateButton.setOnAction(e -> {
-            builder.step();
+            solver.step();
             mazeView.update();
         });
 
         controls.getChildren().addAll(/* algorithmChoice, */ generateButton);
         root.setBottom(controls);
+
 
         Scene scene = new Scene(root, 600, 600);
         primaryStage.setTitle("GUHHHH");
