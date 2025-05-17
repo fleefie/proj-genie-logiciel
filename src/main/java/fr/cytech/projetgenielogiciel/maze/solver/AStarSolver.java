@@ -85,8 +85,6 @@ public class AStarSolver implements ISolver {
                 int tentativeGScore = gScore.getOrDefault(current.getId(), Integer.MAX_VALUE) + 1;
 
                 if (tentativeGScore < gScore.getOrDefault(neighbor.getId(), Integer.MAX_VALUE)) {
-                    current.setParentId(neighbor.getId());
-                    // cameFrom.put(neighbor.getId(), current.getId());
                     gScore.put(neighbor.getId(), tentativeGScore);
                     fScore.put(neighbor.getId(), tentativeGScore + (int) heuristic(neighbor));
 
