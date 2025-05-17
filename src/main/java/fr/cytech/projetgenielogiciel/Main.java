@@ -35,11 +35,11 @@ public class Main extends Application {
         // algorithmChoice.setValue("DFS");
 
         Button generateButton = new Button("Step ahead");
-        IBuilder builder = new BfsBuilder(maze, 0, 0, 9999);
+        IBuilder builder = new DfsBuilder(maze, 0, 0, 9999);
 
         generateButton.setOnAction(e -> {
             builder.step();
-            mazeView.updateMaze(maze);
+            mazeView.update();
         });
 
         controls.getChildren().addAll(/* algorithmChoice, */ generateButton);

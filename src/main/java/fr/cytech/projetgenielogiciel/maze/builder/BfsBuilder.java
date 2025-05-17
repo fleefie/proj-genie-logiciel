@@ -13,6 +13,7 @@ import java.util.Set;
 
 import fr.cytech.projetgenielogiciel.maze.Direction;
 import fr.cytech.projetgenielogiciel.maze.Maze;
+import javafx.scene.paint.Color;
 
 /**
  * Implements a perfect maze builder using a BFS algorithm.
@@ -68,6 +69,7 @@ public class BfsBuilder implements IBuilder {
         this.rand = new Random(seed);
         // Needed here due to how the step() function has to work
         this.positionQueue.offerFirst(currentCell);
+        this.maze.getCell(currentCell.x(), currentCell.y()).setColor(Color.RED);
         this.visited.add(currentCell);
     }
 
@@ -132,7 +134,15 @@ public class BfsBuilder implements IBuilder {
     @Override
     public Boolean step() {
 
+        // If the queue is empty, we're done here
+        if (positionQueue.isEmpty()) {
+            this.finished = true;
+            return false;
+        }
+
+        this.maze.getCell(currentCell.x(), currentCell.y()).setColor(Color.BLUE);
         currentCell = positionQueue.pollFirst();
+        this.maze.getCell(currentCell.x(), currentCell.y()).setColor(Color.RED);
 
         // Check all valid neighbors and add them to the queue
         List<Direction> directions = new ArrayList<>(Arrays.asList(
@@ -151,14 +161,9 @@ public class BfsBuilder implements IBuilder {
                 // Connect the maze and enqueue the target cell
                 maze.connect(currentCell.x(), currentCell.y(), direction);
                 positionQueue.offerLast(target);
+                this.maze.getCell(target.x(), target.y()).setColor(Color.YELLOW);
                 visited.add(target);
             }
-        }
-
-        // If the queue is empty, we're done here
-        if (positionQueue.isEmpty()) {
-            this.finished = true;
-            return false;
         }
 
         return true;

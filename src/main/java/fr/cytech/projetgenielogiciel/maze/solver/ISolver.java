@@ -1,6 +1,5 @@
 package fr.cytech.projetgenielogiciel.maze.solver;
 
-
 import java.util.Iterator;
 
 public interface ISolver extends Iterable<Boolean> {

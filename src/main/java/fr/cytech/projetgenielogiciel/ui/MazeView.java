@@ -28,10 +28,7 @@ public class MazeView extends Pane {
      * The cell views based on their coordinates.
      */
     private final CellView[][] cellViewMap;
-    /**
-     * The color of each cell.
-     */
-    private final Color[][] cellColors;
+
     private final Color wallColor = Color.BLACK;
     private double cellSize;
 
@@ -43,7 +40,6 @@ public class MazeView extends Pane {
     public MazeView(Maze maze) {
         this.maze = maze;
         this.cellViewMap = new CellView[maze.getWidth() + 1][maze.getHeight() + 1];
-        this.cellColors = new Color[maze.getWidth() + 1][maze.getHeight() + 1];
         this.widthProperty().addListener((obs, oldVal, newVal) -> resize());
         this.heightProperty().addListener((obs, oldVal, newVal) -> resize());
         initializeMazeView();
@@ -60,7 +56,6 @@ public class MazeView extends Pane {
                 Cell cell = maze.getCell(x, y);
                 if (cell != null) {
                     cellViewMap[x][y] = new CellView(x, y);
-                    cellColors[x][y] = Color.WHITE;
                     getChildren().add(cellViewMap[x][y]);
                 }
             }
@@ -71,12 +66,14 @@ public class MazeView extends Pane {
 
     /**
      * Updates the MazeView.
-     * 
-     * @param maze the new maze to visualize
      */
-    public void updateMaze(Maze maze) {
-        this.maze = maze;
-        initializeMazeView();
+    public void update() {
+        for (CellView[] cellViews : this.cellViewMap) {
+            for (CellView cellView : cellViews) {
+                cellView.updateColor();
+                cellView.updateWalls();
+            }
+        }
     }
 
     /**
@@ -96,18 +93,6 @@ public class MazeView extends Pane {
         for (CellView[] cellViews : cellViewMap)
             for (CellView cellView : cellViews)
                 cellView.resize();
-    }
-
-    /**
-     * Sets the background color of a specific cell.
-     * 
-     * @param x     the x coordinate of the cell
-     * @param y     the y coordinate of the cell
-     * @param color the color to set
-     */
-    public void setCellColor(int x, int y, Color color) {
-        cellColors[x][y] = color;
-        cellViewMap[x][y].updateColor();
     }
 
     /**
@@ -220,7 +205,7 @@ public class MazeView extends Pane {
         private void updateColor() {
             // This feels REALLY wrong but it seems fine..?
             // Inner classes are such a mess.
-            Color color = cellColors[x][y];
+            Color color = maze.getCell(x, y).getColor();
             background.setFill(color);
         }
 

@@ -1,12 +1,13 @@
 package fr.cytech.projetgenielogiciel.maze;
 
-import fr.cytech.projetgenielogiciel.maze.solver.AStarSolver;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Map;
 import java.util.Stack;
+
+import javafx.scene.paint.Color;
 
 /**
  * Class representing a maze.
@@ -328,5 +329,16 @@ public class Maze {
             return cells[x][y];
         }
         return null;
+    }
+
+    /**
+     * Reset the color of every cell in the maze.
+     */
+    public void resetColors() {
+        for (Cell[] cells : this.cells) {
+            for (Cell cell : cells) {
+                cell.setColor(Color.WHITE);
+            }
+        }
     }
 }

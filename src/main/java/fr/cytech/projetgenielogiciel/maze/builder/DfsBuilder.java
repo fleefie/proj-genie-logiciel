@@ -12,6 +12,7 @@ import java.util.Stack;
 
 import fr.cytech.projetgenielogiciel.maze.Direction;
 import fr.cytech.projetgenielogiciel.maze.Maze;
+import javafx.scene.paint.Color;
 
 /**
  * Implements a perfect maze builder using a DFS algorithm.
@@ -66,7 +67,9 @@ public class DfsBuilder implements IBuilder {
     public DfsBuilder(Maze maze, Integer startx, Integer starty, Integer seed) {
         this.maze = maze;
         this.currentCell = new Position(startx, starty);
+        this.maze.getCell(currentCell.x(), currentCell.y()).setColor(Color.RED);
         this.rand = new Random(seed);
+        this.positionStack.push(currentCell);
     }
 
     /**
@@ -147,22 +150,28 @@ public class DfsBuilder implements IBuilder {
 
                 if (isValidTarget(target)) {
                     // Connect the maze and move to the target cell
-                    maze.connect(currentCell.x(), currentCell.y(), direction);
-                    positionStack.push(target);
-                    currentCell = target;
+                    this.maze.connect(currentCell.x(), currentCell.y(), direction);
+                    this.maze.getCell(currentCell.x(), currentCell.y()).setColor(Color.BLUE);
+                    this.positionStack.push(target);
+                    this.currentCell = target;
+                    this.maze.getCell(currentCell.x(), currentCell.y()).setColor(Color.RED);
                     return true;
                 }
             }
         }
 
         // If no valid neighbors, backtrack
-        positionStack.pop();
-        if (positionStack.isEmpty()) {
+        if (!positionStack.isEmpty()) {
+            positionStack.pop();
+        }
+        if (!positionStack.isEmpty()) {
+            this.maze.getCell(currentCell.x(), currentCell.y()).setColor(Color.BLUE);
+            currentCell = positionStack.peek();
+            this.maze.getCell(currentCell.x(), currentCell.y()).setColor(Color.RED);
+            return true;
+        } else {
             this.finished = true; // We should be done here?
             return false;
-        } else {
-            currentCell = positionStack.peek();
-            return true;
         }
     }
 
