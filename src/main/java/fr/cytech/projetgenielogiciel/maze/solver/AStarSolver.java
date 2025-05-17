@@ -3,17 +3,21 @@ package fr.cytech.projetgenielogiciel.maze.solver;
 import fr.cytech.projetgenielogiciel.maze.Cell;
 import fr.cytech.projetgenielogiciel.maze.Maze;
 import javafx.scene.paint.Color;
+import lombok.Getter;
+import lombok.Setter;
 
 
 import java.util.*;
 
 public class AStarSolver implements ISolver {
+    @Getter
+    @Setter
     protected Maze laby;
     protected boolean solved=false;
     protected Map<Integer, Integer> gScore; // Distance from the start
     protected Map<Integer, Integer> fScore; // Total distance estimation (g + h)
     protected PriorityQueue<Cell> openSet; // Cells who need to be checked
-    private final Stack<Cell> cameFrom = new Stack<Cell>(); //To build the path
+    private final Stack<Cell> cameFrom = new Stack<>(); //To build the path
     protected Cell start;
     protected Cell end;
     protected Cell current;
@@ -44,23 +48,7 @@ public class AStarSolver implements ISolver {
         }
     }
 
-    /**
-     *
-     * @return lab which is the maze
-     */
-    public Maze getLaby() {
-        return this.laby;
-    }
 
-    /**
-     *
-     * @param lab which is the maze you want to change into
-     */
-    public void setLaby(Maze lab) {
-        if (lab != null) {
-            this.laby = lab;
-        }
-    }
 
     /**
      * Does one step from the cell c
@@ -82,8 +70,8 @@ public class AStarSolver implements ISolver {
 
             if(neighbor.getColor()!=Color.WHITE){
                 // verification si le chemin est "plus court"
-                Integer ftemp = fScore.getValue(neighbor.getId());
-                if(ftemp > fScore.getValue(current.getId())){
+                Integer ftemp = fScore.get(neighbor.getId());
+                if(ftemp > fScore.get(current.getId())){
                     Cell actual = cameFrom.pop();
                     while(!actual.equals(neighbor)){
                         actual = cameFrom.pop();
@@ -137,7 +125,7 @@ public class AStarSolver implements ISolver {
         openSet.add(start); // Add in queue
 
         while (!openSet.isEmpty() && !solved) {
-            Cell current = openSet.poll();
+            current = openSet.poll();
             step();
 
         }
@@ -176,7 +164,7 @@ public class AStarSolver implements ISolver {
     @Override
     public Iterator<Boolean> iterator() {
         return new HeuristicIterator();
-    };
+    }
 
     /**
      *
@@ -208,7 +196,7 @@ public class AStarSolver implements ISolver {
 
     /**
      *
-     * @param id
+     * @param id the id of the cell
      * @return the cell corresponding to the id
      */
     private Cell findCellById(int id) {
@@ -224,7 +212,7 @@ public class AStarSolver implements ISolver {
 
     /**
      *
-     * @param cell
+     * @param cell the cell in the maze
      * @return [x,y] the coordinates of the cell
      */
     private int[] findCoordinates(Cell cell) {
