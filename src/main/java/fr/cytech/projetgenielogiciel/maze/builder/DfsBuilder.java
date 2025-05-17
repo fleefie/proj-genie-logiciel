@@ -180,7 +180,7 @@ public class DfsBuilder implements IBuilder {
     /**
      * Checks if the position has any valid targets.
      *
-     * @param target the position of the cell to check.
+     * @param cell the position of the cell to check.
      */
     private Boolean hasValidTargets(Position cell) {
         return (isValidTarget(new Position(cell.x() + 1, cell.y()))

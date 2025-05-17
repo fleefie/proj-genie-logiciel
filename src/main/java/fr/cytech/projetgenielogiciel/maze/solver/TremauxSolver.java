@@ -1,4 +1,4 @@
-package fr.cytech.projetgenielogiciel.Solver;
+package fr.cytech.projetgenielogiciel.maze.solver;
 import fr.cytech.projetgenielogiciel.maze.Cell;
 import fr.cytech.projetgenielogiciel.maze.Maze;
 
