@@ -38,6 +38,12 @@ public class Maze {
     private final Cell[][] cells;
 
     /**
+     * A record holding an (X, Y) position vector in the maze.
+     */
+    public record Position(Integer x, Integer y) {
+    };
+
+    /**
      * Adjacency list for the maze.
      *
      * This should be used with the methods of this class, as the adjacency list
@@ -340,5 +346,42 @@ public class Maze {
                 cell.setColor(Color.WHITE);
             }
         }
+    }
+
+    /**
+     * Finds the coordinates of a cell.
+     *
+     * @param cell the cell in the maze
+     * @return [x,y] the coordinates of the cell
+     */
+    public Position findCoordinates(Cell cell) {
+        if (cell == null)
+            return null;
+
+        for (int x = 0; x <= this.getWidth(); x++) {
+            for (int y = 0; y <= this.getHeight(); y++) {
+                if (this.getCell(x, y) != null && this.getCell(x, y).equals(cell)) {
+                    return new Position(x, y);
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Find a cell in the maze by its ID.
+     *
+     * @param id the id of the cell
+     * @return the cell corresponding to the id
+     */
+    public Cell findCellById(Integer id) {
+        for (int x = 0; x <= this.getWidth(); x++) {
+            for (int y = 0; y <= this.getHeight(); y++) {
+                if (this.getCell(x, y) != null && this.getCell(x, y).getId() == id) {
+                    return this.getCell(x, y);
+                }
+            }
+        }
+        return null;
     }
 }
