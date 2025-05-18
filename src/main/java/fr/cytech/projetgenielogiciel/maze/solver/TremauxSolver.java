@@ -143,21 +143,24 @@ public class TremauxSolver implements ISolver {
     @Override
     public Iterator<Boolean> iterator() {
         return new TremauxIterator();
-    };
+    }
 
     // ???
     public Boolean isFinished(){
         return solved;
     }
 
-
+    /**
+     * Search the next cell, firstly with mark=0 then secondly with mark=1
+     * @return the next cell
+     */
     private Cell getNextCell() {
         List<Integer> neighbors = laby.getAdjacencyList().getNeighbors(current.getId());
         Cell nextCell = null;
 
         // Search unvisited cell (with mark=0)
         for (Integer neighborId : neighbors) {
-            Cell neighbor = findCellById(neighborId);
+            Cell neighbor = laby.findCellById(neighborId);
             if (marks.get(neighbor.getId()) == 0) {
                 nextCell = neighbor;
                 break;
@@ -167,7 +170,7 @@ public class TremauxSolver implements ISolver {
         // Search cells which has benn visited only one time (with mark=1)
         if (nextCell == null) { //if there is no cells with mark=0
             for (Integer neighborId : neighbors) {
-                Cell neighbor = findCellById(neighborId);
+                Cell neighbor = laby.findCellById(neighborId);
                 if (marks.get(neighbor.getId()) == 1 && !neighbor.equals(path.peek())) {
                     nextCell = neighbor;
                     break;
