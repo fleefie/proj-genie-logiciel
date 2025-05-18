@@ -28,7 +28,7 @@ public class Main extends Application {
 
         BorderPane root = new BorderPane();
         root.setStyle("-fx-padding: 20;");
-        Maze maze = new Maze(5, 5);
+        Maze maze = new Maze(15, 15);
         MazeView mazeView = new MazeView(maze);
         root.setCenter(mazeView);
 
@@ -39,12 +39,12 @@ public class Main extends Application {
         // algorithmChoice.setValue("DFS");
 
         Button generateButton = new Button("Step ahead");
-        IBuilder builder = new BfsBuilder(maze, 0, 0,253);
+        IBuilder builder = new DfsBuilder(maze, 0, 0,253);
         builder.build();
         maze.resetColors();
 
         ISolver solver = new AStarSolver(maze, maze.getCell(0, 0),
-                maze.getCell(maze.getWidth(), maze.getHeight()),0.5,0.5);
+                maze.getCell(maze.getWidth(), 0),0.5,0.5);
 
         generateButton.setOnAction(e -> {
             solver.step();
