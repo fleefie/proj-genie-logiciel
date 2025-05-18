@@ -21,6 +21,8 @@ public class AStarSolver implements ISolver {
     protected Cell start;
     protected Cell end;
     protected Cell current;
+    protected double pondG;
+    protected double pondH;
 
     /**
      * Creator of Solver class
@@ -28,7 +30,7 @@ public class AStarSolver implements ISolver {
      * @param lab take a maze that will be solved step by step
      *
      */
-    public AStarSolver(Maze lab, Cell start, Cell end) {
+    public AStarSolver(Maze lab, Cell start, Cell end, double pondG, double pondH) {
         try {
             if (lab == null) {
                 throw new IllegalArgumentException("labyrinthe null || case null");
@@ -38,6 +40,8 @@ public class AStarSolver implements ISolver {
             this.end = end;
             this.laby = lab;
             this.solved = false;
+            this.pondG = pondG;
+            this.pondH = pondH;
             this.gScore = new HashMap<>(); // Distance start and actual pos
             this.fScore = new HashMap<>(); // Distance gScore + heuristic
             this.openSet = new PriorityQueue<>(
@@ -66,15 +70,22 @@ public class AStarSolver implements ISolver {
      *
      */
     public Boolean step() {
-        current = openSet.poll();
+        if(solved){
+            return false;
+        }
+        current.setColor(Color.BLUE);
+        current=openSet.poll();
         current.setColor(Color.RED);
         System.out.println("actuel "+current);
         System.out.println("fScore "+fScore.get(current.getId()));
         System.out.println("gScore "+gScore.get(current.getId()));
         if(current.getId()==end.getId()){
-            System.out.println("FINISHED");
             solved = true;
             cameFrom.add(current);
+            while(!cameFrom.isEmpty()){
+                Cell temp = cameFrom.pop();
+                temp.setColor(Color.GREEN);
+            }
             return true;
         }
         Boolean isntStuck = false;
@@ -102,7 +113,8 @@ public class AStarSolver implements ISolver {
                 int tentativeGScore = gScore.getOrDefault(current.getId(), Integer.MAX_VALUE) + 1;
 
                 gScore.put(neighbor.getId(), tentativeGScore);
-                fScore.put(neighbor.getId(), tentativeGScore + heuristic(neighbor));
+                Integer tempF =(int) ((tentativeGScore*pondG) + (heuristic(neighbor)*pondH))*2;
+                fScore.put(neighbor.getId(), tempF);
 
                 openSet.add(neighbor);
                 System.out.println(neighbor+" ajouté");
@@ -111,7 +123,7 @@ public class AStarSolver implements ISolver {
             }
 
         }
-        current.setColor(Color.BLUE);
+
         if(!isntStuck){
             current = cameFrom.pop();
         }

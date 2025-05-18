@@ -44,7 +44,7 @@ public class Main extends Application {
         maze.resetColors();
 
         ISolver solver = new AStarSolver(maze, maze.getCell(0, 0),
-                maze.getCell(maze.getWidth(), maze.getHeight()));
+                maze.getCell(maze.getWidth(), maze.getHeight()),0.5,0.5);
 
         generateButton.setOnAction(e -> {
             solver.step();
