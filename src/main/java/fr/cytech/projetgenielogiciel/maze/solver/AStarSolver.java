@@ -23,6 +23,7 @@ public class AStarSolver implements ISolver {
     protected Cell current;
     protected double pondG;
     protected double pondH;
+    Cell old=null;
 
     /**
      * Creator of Solver class
@@ -70,8 +71,12 @@ public class AStarSolver implements ISolver {
      *
      */
     public Boolean step() {
-        if(solved){
+        if(solved) {
             return false;
+
+        }
+        if(old!=null){
+            old.setColor(Color.BLUE);
         }
         current.setColor(Color.BLUE);
         current=openSet.poll();
@@ -81,14 +86,25 @@ public class AStarSolver implements ISolver {
         System.out.println("gScore "+gScore.get(current.getId()));
         if(current.getId()==end.getId()){
             solved = true;
-            cameFrom.add(current);
+            current.setColor(Color.GREEN);
             while(!cameFrom.isEmpty()){
                 Cell temp = cameFrom.pop();
-                temp.setColor(Color.GREEN);
+                int voisin = 0;
+                for (Integer neighborId : laby.getAdjacencyList().getNeighbors(temp.getId())) {
+                    Cell neighbor = findCellById(neighborId);
+                    if (neighbor == null)
+                        continue;
+                    else if (cameFrom.contains(neighbor) || neighbor.getColor() == Color.GREEN) {
+                        voisin++;
+                    }
+                }
+                if(voisin == 2 || temp == start){
+                    temp.setColor(Color.GREEN);
+                }
             }
             return true;
         }
-        Boolean isntStuck = false;
+        Boolean stuck = true;
 
         for (Integer neighborId : laby.getAdjacencyList().getNeighbors(current.getId())) {
             Cell neighbor = findCellById(neighborId);
@@ -108,7 +124,7 @@ public class AStarSolver implements ISolver {
                 }
             }
             else{
-                isntStuck = true;
+                stuck = false;
 
                 int tentativeGScore = gScore.getOrDefault(current.getId(), Integer.MAX_VALUE) + 1;
 
@@ -118,14 +134,28 @@ public class AStarSolver implements ISolver {
 
                 openSet.add(neighbor);
                 System.out.println(neighbor+" ajouté");
-
-
             }
 
         }
 
-        if(!isntStuck){
-            current = cameFrom.pop();
+        if(stuck){
+            old = current;
+            while(stuck && !cameFrom.isEmpty()) {
+                current = cameFrom.pop();
+                for (Integer neighborId : laby.getAdjacencyList().getNeighbors(current.getId())) {
+                    Cell neighbor = findCellById(neighborId);
+                    if (neighbor == null)
+                        continue;
+
+                    if (neighbor.getColor() == Color.WHITE){
+                        stuck = false;
+                    }
+
+                }
+                if(!stuck){
+                    cameFrom.add(current);
+                }
+            }
         }
         else{
             cameFrom.add(current);
