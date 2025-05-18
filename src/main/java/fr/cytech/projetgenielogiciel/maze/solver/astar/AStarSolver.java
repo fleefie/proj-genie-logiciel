@@ -217,33 +217,13 @@ public abstract class AStarSolver implements ISolver {
             return false;
         }
 
-        if (!initialized) {
-            gScore.put(start.getId(), 0.0);
-            fScore.put(start.getId(), heuristic(start));
-            openSet.add(start);
-            initialized = true;
-        }
-
         while (!openSet.isEmpty() && !solved) {
-            current = openSet.poll();
             step();
-
         }
-        /*
-         * Duplicated code, but it's fine here. It doesn't make much
-         * sense to bloat up the call stack for something so trivial.
-         */
+
         if (solved) {
-            while (!cameFrom.isEmpty()) {
-                Cell current = cameFrom.pop();
-                current.setColor(Color.GREEN);
-            }
             return true;
         } else {
-            /*
-             * If false is returned here, the maze isn't solvable, no more
-             * steps may be performed.
-             */
             return false;
         }
     }

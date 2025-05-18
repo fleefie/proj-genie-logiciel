@@ -22,9 +22,8 @@ public class AStarEuclideanSolver extends AStarSolver {
             return Double.MAX_VALUE;
         }
 
-        return Math.sqrt(
-                Math.pow(currentCoords.x() - endCoords.x(), 2)
-                        + Math.pow(currentCoords.y() - endCoords.y(), 2));
+        return Math
+                .sqrt(Math.pow(currentCoords.x() - endCoords.x(), 2) + Math.pow(currentCoords.y() - endCoords.y(), 2));
     }
 
 }
