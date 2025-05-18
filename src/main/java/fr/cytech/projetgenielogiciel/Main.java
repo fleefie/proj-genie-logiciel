@@ -8,12 +8,15 @@ import fr.cytech.projetgenielogiciel.maze.solver.astar.AStarDjikstraSolver;
 import fr.cytech.projetgenielogiciel.maze.solver.astar.AStarEuclideanSolver;
 import fr.cytech.projetgenielogiciel.maze.solver.astar.AStarManhattanSolver;
 import fr.cytech.projetgenielogiciel.ui.MazeView;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import lombok.NoArgsConstructor;
 
 /**
@@ -27,7 +30,7 @@ public class Main extends Application {
 
         BorderPane root = new BorderPane();
         root.setStyle("-fx-padding: 20;");
-        Maze maze = new Maze(15, 15);
+        Maze maze = new Maze(50, 50);
         MazeView mazeView = new MazeView(maze);
         root.setCenter(mazeView);
 
@@ -57,6 +60,18 @@ public class Main extends Application {
         primaryStage.setTitle("GUHHHH");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        Timeline solverTimeline = new Timeline();
+        solverTimeline.getKeyFrames().add(new KeyFrame(Duration.millis(100), e -> {
+            boolean keepGoing = solver.step();
+            mazeView.update();
+            if (!keepGoing) {
+                solverTimeline.stop(); // <-- just use your variable directly
+            }
+        }));
+        solverTimeline.setCycleCount(Timeline.INDEFINITE);
+        solverTimeline.play();
+
     }
 
     /**
