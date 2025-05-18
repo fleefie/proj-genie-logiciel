@@ -42,11 +42,11 @@ public class Main extends Application {
         builder.build();
         maze.resetColors();
 
-        ISolver solver = new AStarDjikstraSolver(maze, maze.getCell(0, 0),
-                maze.getCell(maze.getWidth(), maze.getHeight()));
+        ISolver solver = new AStarManhattanSolver(maze, maze.getCell(0, 0),
+                maze.getCell(maze.getWidth(), maze.getHeight()), 0.5, 0.5);
 
         generateButton.setOnAction(e -> {
-            solver.solve();
+            solver.step();
             mazeView.update();
         });
 

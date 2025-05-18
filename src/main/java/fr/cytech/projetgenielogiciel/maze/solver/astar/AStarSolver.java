@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.Stack;
 
 import fr.cytech.projetgenielogiciel.maze.Cell;
 import fr.cytech.projetgenielogiciel.maze.Maze;
@@ -51,7 +50,7 @@ public abstract class AStarSolver implements ISolver {
     /**
      * The stack representing the final path.
      */
-    protected Stack<Cell> cameFrom = new Stack<>();
+    protected Map<Integer, Integer> cameFrom;
 
     /**
      * The starting cell.
@@ -79,11 +78,6 @@ public abstract class AStarSolver implements ISolver {
     protected double heuristicFactor;
 
     /**
-     * The previously checked cell.
-     */
-    private Cell old = null;
-
-    /**
      * Whether the solver was initialized.
      */
     private Boolean initialized = false;
@@ -97,24 +91,23 @@ public abstract class AStarSolver implements ISolver {
      * @pondG the factor for the distance from the start
      * @pondH the factor for the estimated distance from the end (Heuristic-based)
      */
-    public AStarSolver(Maze maze, Cell start, Cell end, double pondG, double pondH) {
+    public AStarSolver(Maze maze, Cell start, Cell end, double distanceFactor, double heuristicFactor) {
         this.current = start;
         this.start = start;
         this.end = end;
         this.maze = maze;
         this.solved = false;
-        this.distanceFactor = pondG;
-        this.heuristicFactor = pondH;
+        this.distanceFactor = distanceFactor;
+        this.heuristicFactor = heuristicFactor;
         this.gScore = new HashMap<>();
         this.fScore = new HashMap<>();
         this.openSet = new PriorityQueue<>(
                 Comparator.comparingDouble(c -> fScore.getOrDefault(c.getId(), Double.MAX_VALUE)));
-
+        this.cameFrom = new HashMap<>();
         this.solved = false;
         this.gScore.clear();
         this.fScore.clear();
         this.openSet.clear();
-
     }
 
     /**
@@ -123,9 +116,11 @@ public abstract class AStarSolver implements ISolver {
      * @return Whether a step could be performed.
      */
     public Boolean step() {
-        if (solved) {
+        // No need to do anything in this case
+        if (solved)
             return false;
-        }
+
+        // Quick initialization check!
         if (!initialized) {
             gScore.put(start.getId(), 0.0);
             fScore.put(start.getId(), heuristic(start));
@@ -133,77 +128,94 @@ public abstract class AStarSolver implements ISolver {
             initialized = true;
         }
 
-        if (old != null) {
-            old.setColor(Color.BLUE);
-        }
-        current.setColor(Color.BLUE);
-        current = openSet.poll();
-        current.setColor(Color.RED);
-        System.out.println("actuel " + current);
-        System.out.println("fScore " + fScore.get(current.getId()));
-        System.out.println("gScore " + gScore.get(current.getId()));
-        if (current.getId() == end.getId()) {
+        // If the open set is empty, we're done and the maze is not solvable.
+        if (openSet.isEmpty()) {
             solved = true;
-            current.setColor(Color.GREEN);
-            while (!cameFrom.isEmpty()) {
-                Cell temp = cameFrom.pop();
-                int voisin = 0;
-                for (Integer neighborId : maze.getAdjacencyList().getNeighbors(temp.getId())) {
-                    Cell neighbor = maze.findCellById(neighborId);
-                    if (neighbor == null)
-                        continue;
-                    else if (cameFrom.contains(neighbor) || neighbor.getColor() == Color.GREEN) {
-                        voisin++;
-                    }
-                }
-                if (voisin == 2 || temp == start) {
-                    temp.setColor(Color.GREEN);
+            return false;
+        }
+
+        // Remove the previous path highlight
+        for (Cell[] row : maze.getCells()) {
+            for (Cell cell : row) {
+                if (cell.getColor() == Color.GREEN && cell != start && cell != end) {
+                    cell.setColor(Color.WHITE);
                 }
             }
+        }
+
+        current = openSet.poll();
+
+        // Make every processed cell blue
+        for (Cell[] row : maze.getCells()) {
+            for (Cell cell : row) {
+                if (cell != start && cell != end &&
+                        gScore.containsKey(cell.getId()) &&
+                        !openSet.contains(cell) &&
+                        cell != current &&
+                        cell.getColor() != Color.GREEN) {
+                    cell.setColor(Color.BLUE);
+                }
+            }
+        }
+
+        // Make cells that need to be processed yellow
+        for (Cell cell : openSet) {
+            /*
+             * Pretty ugly but honestly that's the easiest way to do it without adding a
+             * visited set,
+             * which would itself make it much more complex.
+             */
+            if (cell != start && cell != end && cell != current && cell.getColor() != Color.GREEN) {
+                cell.setColor(Color.YELLOW);
+            }
+        }
+
+        // Make current cell red
+        current.setColor(Color.RED);
+
+        /*
+         * Check whether we've finished early to avoid needless checking.
+         * If solved, highlight the final full path in green
+         */
+        if (current.getId() == end.getId()) {
+            Integer pathId = end.getId();
+            while (pathId != null) {
+                Cell pathCell = maze.findCellById(pathId);
+                if (pathCell != null)
+                    pathCell.setColor(Color.GREEN);
+                pathId = cameFrom.get(pathId);
+            }
+            solved = true;
             return true;
         }
-        Boolean stuck = true;
 
+        // If we're not done, check for potential neighbors
         for (Integer neighborId : maze.getAdjacencyList().getNeighbors(current.getId())) {
             Cell neighbor = maze.findCellById(neighborId);
-            System.out.println("voisin " + neighbor);
             if (neighbor == null)
                 continue;
 
-            if (neighbor.getColor() == Color.BLUE) {
-                // Check if the path is estimated to be shorter
-                Double fTemp = fScore.get(neighbor.getId());
-                if (fTemp > fScore.get(current.getId())) {
-                    Cell actual = cameFrom.pop();
-                    while (!actual.equals(neighbor)) {
-                        actual = cameFrom.pop();
-                    }
-                    cameFrom.add(current);
-                }
-            } else {
-                stuck = false;
-
-                Double tentativeGScore = gScore.getOrDefault(current.getId(), Double.MAX_VALUE);
-
-                gScore.put(neighbor.getId(), tentativeGScore);
-                Double tempF = ((tentativeGScore * distanceFactor) + (heuristic(neighbor) * heuristicFactor))
-                        * 2;
-                fScore.put(neighbor.getId(), tempF);
-
-                openSet.add(neighbor);
-                System.out.println(neighbor + " ajouté");
+            Double tryGScore = gScore.getOrDefault(current.getId(), Double.MAX_VALUE) + 1;
+            if (tryGScore < gScore.getOrDefault(neighborId, Double.MAX_VALUE)) {
+                cameFrom.put(neighborId, current.getId());
+                gScore.put(neighborId, tryGScore);
+                Double tryFScore = (tryGScore * distanceFactor) + (heuristic(neighbor) * heuristicFactor);
+                fScore.put(neighborId, tryFScore);
+                if (!openSet.contains(neighbor))
+                    openSet.add(neighbor);
             }
-
         }
 
-        if (stuck) {
-            old = current;
-        } else {
-            cameFrom.add(current);
+        // Highlight the current temporary path.
+        Integer pathId = current.getId();
+        while (pathId != null) {
+            Cell pathCell = maze.findCellById(pathId);
+            if (pathCell != null && pathCell != end && pathCell != current) {
+                pathCell.setColor(Color.GREEN);
+            }
+            pathId = cameFrom.get(pathId);
         }
-        System.out.println("openset " + openSet);
-        System.out.println("cameFrom " + cameFrom);
-        System.out.println();
+
         return true;
     }
 
