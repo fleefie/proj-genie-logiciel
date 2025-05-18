@@ -213,6 +213,13 @@ public abstract class AStarSolver implements ISolver {
      * @return whether a step could be performed
      */
     public Boolean solve() {
+        if (!initialized) {
+            gScore.put(start.getId(), 0.0);
+            fScore.put(start.getId(), heuristic(start));
+            openSet.add(start);
+            initialized = true;
+        }
+
         if (current == end) {
             return false;
         }
