@@ -1,13 +1,12 @@
 package fr.cytech.projetgenielogiciel;
 
-
 import fr.cytech.projetgenielogiciel.maze.Maze;
-import fr.cytech.projetgenielogiciel.maze.solver.ISolver;
-import fr.cytech.projetgenielogiciel.maze.solver.AStarSolver;
-import fr.cytech.projetgenielogiciel.maze.solver.TremauxSolver;
-import fr.cytech.projetgenielogiciel.maze.builder.BfsBuilder;
 import fr.cytech.projetgenielogiciel.maze.builder.DfsBuilder;
 import fr.cytech.projetgenielogiciel.maze.builder.IBuilder;
+import fr.cytech.projetgenielogiciel.maze.solver.ISolver;
+import fr.cytech.projetgenielogiciel.maze.solver.astar.AStarDjikstraSolver;
+import fr.cytech.projetgenielogiciel.maze.solver.astar.AStarEuclideanSolver;
+import fr.cytech.projetgenielogiciel.maze.solver.astar.AStarManhattanSolver;
 import fr.cytech.projetgenielogiciel.ui.MazeView;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -28,7 +27,7 @@ public class Main extends Application {
 
         BorderPane root = new BorderPane();
         root.setStyle("-fx-padding: 20;");
-        Maze maze = new Maze(5, 5);
+        Maze maze = new Maze(15, 15);
         MazeView mazeView = new MazeView(maze);
         root.setCenter(mazeView);
 
@@ -39,12 +38,12 @@ public class Main extends Application {
         // algorithmChoice.setValue("DFS");
 
         Button generateButton = new Button("Step ahead");
-        IBuilder builder = new BfsBuilder(maze, 0, 0,253);
+        IBuilder builder = new DfsBuilder(maze, 0, 0, 253);
         builder.build();
         maze.resetColors();
 
-        ISolver solver = new AStarSolver(maze, maze.getCell(0, 0),
-                maze.getCell(maze.getWidth(), maze.getHeight()),0.5,0.5);
+        ISolver solver = new AStarDjikstraSolver(maze, maze.getCell(0, 0),
+                maze.getCell(maze.getWidth(), maze.getHeight()));
 
         generateButton.setOnAction(e -> {
             solver.step();
@@ -53,7 +52,6 @@ public class Main extends Application {
 
         controls.getChildren().addAll(/* algorithmChoice, */ generateButton);
         root.setBottom(controls);
-
 
         Scene scene = new Scene(root, 600, 600);
         primaryStage.setTitle("GUHHHH");
