@@ -139,7 +139,9 @@ public class AStarSolver implements ISolver {
         }
 
         if(stuck){
-            old = current;
+            old = current; //Just to color it and it also deny the add to cameFrom
+
+            /* Useless old code just here incase needed again
             while(stuck && !cameFrom.isEmpty()) {
                 current = cameFrom.pop();
                 for (Integer neighborId : laby.getAdjacencyList().getNeighbors(current.getId())) {
@@ -155,7 +157,10 @@ public class AStarSolver implements ISolver {
                 if(!stuck){
                     cameFrom.add(current);
                 }
+
+
             }
+            */
         }
         else{
             cameFrom.add(current);

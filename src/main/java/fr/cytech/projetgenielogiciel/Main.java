@@ -39,7 +39,7 @@ public class Main extends Application {
         // algorithmChoice.setValue("DFS");
 
         Button generateButton = new Button("Step ahead");
-        IBuilder builder = new DfsBuilder(maze, 0, 0, 9999);
+        IBuilder builder = new BfsBuilder(maze, 0, 0,253);
         builder.build();
         maze.resetColors();
 
