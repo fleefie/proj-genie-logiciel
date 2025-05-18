@@ -12,17 +12,13 @@ import java.util.Stack;
 
 import fr.cytech.projetgenielogiciel.maze.Direction;
 import fr.cytech.projetgenielogiciel.maze.Maze;
+import fr.cytech.projetgenielogiciel.maze.Maze.Position;
 import javafx.scene.paint.Color;
 
 /**
  * Implements a perfect maze builder using a DFS algorithm.
  */
 public class DfsBuilder implements IBuilder {
-    /**
-     * Record for holding a cell's position.
-     */
-    record Position(Integer x, Integer y) {
-    };
 
     /**
      * Holds the set of cells that were visited.

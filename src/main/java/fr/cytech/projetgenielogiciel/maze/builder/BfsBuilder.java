@@ -3,27 +3,23 @@ package fr.cytech.projetgenielogiciel.maze.builder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Deque;
 import java.util.Random;
 import java.util.Set;
 
 import fr.cytech.projetgenielogiciel.maze.Direction;
 import fr.cytech.projetgenielogiciel.maze.Maze;
+import fr.cytech.projetgenielogiciel.maze.Maze.Position;
 import javafx.scene.paint.Color;
 
 /**
  * Implements a perfect maze builder using a BFS algorithm.
  */
 public class BfsBuilder implements IBuilder {
-    /**
-     * Record for holding a cell's position.
-     */
-    record Position(Integer x, Integer y) {
-    };
 
     /**
      * Holds the set of cells that were visited.
