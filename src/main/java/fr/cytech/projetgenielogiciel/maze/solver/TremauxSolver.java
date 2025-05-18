@@ -40,7 +40,7 @@ public class TremauxSolver implements ISolver {
     /** Solve the maze by starting from s to f
      */
     public Boolean solve(){
-        return true;
+        return solved;
     }
 
     //Setup les trucs de bases
@@ -70,7 +70,7 @@ public class TremauxSolver implements ISolver {
 
     // ???
     public Boolean isFinished(){
-        return false;
+        return solved;
     }
 
 
