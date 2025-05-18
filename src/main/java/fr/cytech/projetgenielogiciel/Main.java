@@ -49,7 +49,7 @@ public class Main extends Application {
                 maze.getCell(maze.getWidth(), maze.getHeight()), 0.5, 0.5);
 
         generateButton.setOnAction(e -> {
-            solver.step();
+            solver.solve();
             mazeView.update();
         });
 
@@ -60,18 +60,18 @@ public class Main extends Application {
         primaryStage.setTitle("GUHHHH");
         primaryStage.setScene(scene);
         primaryStage.show();
-
-        Timeline solverTimeline = new Timeline();
-        solverTimeline.getKeyFrames().add(new KeyFrame(Duration.millis(100), e -> {
-            boolean keepGoing = solver.step();
-            mazeView.update();
-            if (!keepGoing) {
-                solverTimeline.stop(); // <-- just use your variable directly
-            }
-        }));
-        solverTimeline.setCycleCount(Timeline.INDEFINITE);
-        solverTimeline.play();
-
+        //
+        // Timeline solverTimeline = new Timeline();
+        // solverTimeline.getKeyFrames().add(new KeyFrame(Duration.millis(100), e -> {
+        // boolean keepGoing = solver.step();
+        // mazeView.update();
+        // if (!keepGoing) {
+        // solverTimeline.stop(); // <-- just use your variable directly
+        // }
+        // }));
+        // solverTimeline.setCycleCount(Timeline.INDEFINITE);
+        // solverTimeline.play();
+        //
     }
 
     /**
