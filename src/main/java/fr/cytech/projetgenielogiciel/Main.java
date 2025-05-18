@@ -47,7 +47,8 @@ public class Main extends Application {
                 maze.getCell(maze.getWidth(), 0),0.5,0.5);
 
         generateButton.setOnAction(e -> {
-            solver.step();
+            solver.solve();
+            //solver.step();
             mazeView.update();
         });
 

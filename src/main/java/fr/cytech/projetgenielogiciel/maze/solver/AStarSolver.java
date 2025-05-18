@@ -180,15 +180,10 @@ public class AStarSolver implements ISolver {
         }
 
         while (!openSet.isEmpty() && !solved) {
-            current = openSet.poll();
             step();
 
         }
         if(solved){ //If we got a solution
-            while (!cameFrom.isEmpty()) {
-                Cell current = cameFrom.pop();
-                current.setColor(Color.GREEN);
-            }
             return true;
         }
         else{ //We dont have a solution
