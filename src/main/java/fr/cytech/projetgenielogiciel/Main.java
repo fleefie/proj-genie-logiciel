@@ -1,9 +1,11 @@
 package fr.cytech.projetgenielogiciel;
 
 import fr.cytech.projetgenielogiciel.maze.Maze;
+import fr.cytech.projetgenielogiciel.maze.builder.BfsBuilder;
 import fr.cytech.projetgenielogiciel.maze.builder.DfsBuilder;
 import fr.cytech.projetgenielogiciel.maze.builder.IBuilder;
 import fr.cytech.projetgenielogiciel.maze.solver.ISolver;
+import fr.cytech.projetgenielogiciel.maze.solver.TremauxSolver;
 import fr.cytech.projetgenielogiciel.maze.solver.astar.AStarDjikstraSolver;
 import fr.cytech.projetgenielogiciel.maze.solver.astar.AStarEuclideanSolver;
 import fr.cytech.projetgenielogiciel.maze.solver.astar.AStarManhattanSolver;
@@ -30,7 +32,7 @@ public class Main extends Application {
 
         BorderPane root = new BorderPane();
         root.setStyle("-fx-padding: 20;");
-        Maze maze = new Maze(50, 50);
+        Maze maze = new Maze(10, 10);
         MazeView mazeView = new MazeView(maze);
         root.setCenter(mazeView);
 
@@ -41,15 +43,18 @@ public class Main extends Application {
         // algorithmChoice.setValue("DFS");
 
         Button generateButton = new Button("Step ahead");
-        IBuilder builder = new DfsBuilder(maze, 0, 0, 253);
+        IBuilder builder = new DfsBuilder(maze, 0, 0, 8453); //253, 1967
         builder.build();
         maze.resetColors();
 
-        ISolver solver = new AStarManhattanSolver(maze, maze.getCell(0, 0),
-                maze.getCell(maze.getWidth(), maze.getHeight()), 0.5, 0.5);
+        //ISolver solver = new AStarManhattanSolver(maze, maze.getCell(0, 0),
+        //maze.getCell(maze.getWidth(), maze.getHeight()), 0.5, 0.5);
+        ISolver solver = new TremauxSolver(maze, maze.getCell(0, 0),
+                maze.getCell(maze.getWidth(), maze.getHeight()));
 
         generateButton.setOnAction(e -> {
-            solver.solve();
+            //solver.solve();
+            solver.step();
             mazeView.update();
         });
 
@@ -60,18 +65,19 @@ public class Main extends Application {
         primaryStage.setTitle("GUHHHH");
         primaryStage.setScene(scene);
         primaryStage.show();
-        //
-        // Timeline solverTimeline = new Timeline();
-        // solverTimeline.getKeyFrames().add(new KeyFrame(Duration.millis(100), e -> {
-        // boolean keepGoing = solver.step();
-        // mazeView.update();
-        // if (!keepGoing) {
-        // solverTimeline.stop(); // <-- just use your variable directly
-        // }
-        // }));
-        // solverTimeline.setCycleCount(Timeline.INDEFINITE);
-        // solverTimeline.play();
-        //
+
+        /*
+        Timeline solverTimeline = new Timeline();
+        solverTimeline.getKeyFrames().add(new KeyFrame(Duration.millis(100), e -> {
+            boolean keepGoing = solver.step();
+            mazeView.update();
+            if (!keepGoing) {
+                solverTimeline.stop(); // <-- just use your variable directly
+            }
+        }));
+        solverTimeline.setCycleCount(Timeline.INDEFINITE);
+        solverTimeline.play();
+        */
     }
 
     /**

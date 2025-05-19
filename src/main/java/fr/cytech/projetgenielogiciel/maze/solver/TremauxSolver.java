@@ -87,7 +87,7 @@ public class TremauxSolver implements ISolver {
             }
         } else {
             // go to the next cell
-            current.setColor(Color.BLUE);
+            current.setColor(Color.GREEN);
             path.push(current);
             current = nextCell;
             marks.put(current.getId(), marks.get(current.getId()) + 1);
@@ -103,16 +103,11 @@ public class TremauxSolver implements ISolver {
         if (current == end) {
             return false;
         }
-
-        while (!solved) {
-            step();
+        Boolean ret=true; //need ret to detect problems in the solution
+        while (!solved && ret ) {
+            ret=step();
         }
-
-        if (solved) {
-            for (Cell cell : path) {
-                cell.setColor(Color.GREEN);
-            }
-            end.setColor(Color.GREEN);
+        if(solved) {
             return true;
         }
         else {
