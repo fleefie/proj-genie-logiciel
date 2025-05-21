@@ -6,10 +6,12 @@ import fr.cytech.projetgenielogiciel.maze.solver.ISolver;
 import fr.cytech.projetgenielogiciel.maze.solver.TremauxSolver;
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 public class Menus extends Application {
@@ -73,29 +75,96 @@ public class Menus extends Application {
     }
     @Override
     public void start(Stage primaryStage){
-
         //Panel initialization
         BorderPane root = new BorderPane();
         root.setStyle("-fx-padding: 20;");
         Scene scene = new Scene(root, 600, 600);
-        primaryStage.setTitle("GUHHHH");
+        primaryStage.setTitle("CYnapse");
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        //
+        //Title
+        Label title1 = new Label("CYnapse");
+        title1.setStyle("-fx-font-size: 30px;");
+        BorderPane.setAlignment(title1, Pos.TOP_CENTER);
+        root.setTop(title1);
+
+        //Center of scene
         HBox hbox1 = new HBox();
         hbox1.setPadding(new Insets(10));
         hbox1.setSpacing(10);
-        Button bouton1 = new Button("Show maze");
-        Button bouton2 = new Button("Test 2");
-        Button bouton3 = new Button("Test 3");
-        hbox1.getChildren().addAll(bouton1,bouton2,bouton3);
+        hbox1.setAlignment(Pos.CENTER);
+        Button generator = new Button("Generator");
+        Button loadMaze = new Button("Load maze");
+        hbox1.getChildren().addAll(generator,loadMaze);
+        root.setCenter(hbox1);
 
-        bouton1.setOnAction(e -> {
+        //Bottom of scene
+        Button about = new Button("About");
+        BorderPane.setAlignment(about, Pos.BOTTOM_CENTER);
+        root.setBottom(about);
+
+        generator.setOnAction(e -> {
+            Generator(primaryStage);
+        });
+        loadMaze.setOnAction(e -> {
+            System.out.println("Load maze");
+        });
+        about.setOnAction(e -> {
+            System.out.println("About");
+        });
+
+
+        //DEBUG
+        Button debug1 = new Button("Show maze");
+        BorderPane.setAlignment(debug1, Pos.BOTTOM_RIGHT);
+        root.setRight(debug1);
+        debug1.setOnAction(e -> {
             showMaze(primaryStage);
         });
 
-        root.setCenter(hbox1);
+    }
 
+    public void Generator(Stage primaryStage){
+        //Panel initialization
+        BorderPane root = new BorderPane();
+        root.setStyle("-fx-padding: 20;");
+        Scene scene = new Scene(root, 600, 600);
+        primaryStage.setTitle("Generator");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+        //Top of scene
+        HBox hbox1 = new HBox();
+        hbox1.setPadding(new Insets(10));
+        hbox1.setSpacing(10);
+        //Length of maze
+        TextField posX = new TextField();
+        posX.setPromptText("X");
+        posX.setPrefWidth(40);
+        TextField posY = new TextField();
+        posY.setPromptText("Y");
+        posY.setPrefWidth(40);
+        //Algorithm choice
+        ComboBox<String> algorithmChoice = new ComboBox<>();
+        algorithmChoice.getItems().addAll("DFS", "BFS");
+        algorithmChoice.setPromptText("Algorithm");
+        algorithmChoice.setPrefWidth(120);
+        //Seed selection
+        TextField seed = new TextField();
+        seed.setPromptText("Seed");
+        seed.setPrefWidth(70);
+        //Add into hbox
+        hbox1.getChildren().addAll(posX,posY,algorithmChoice,seed);
+        //BorderPane.setAlignment(hbox1, Pos.TOP_CENTER);
+        root.setTop(hbox1);
+
+        //Center of scene
+        //text : type de résolution
+        //liste de checkbox
+        //AStar Djikstra, Euclidean, Manhattan
+        //Tremaux
+
+        //Bottom of scene
     }
 }
