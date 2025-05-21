@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
@@ -96,6 +97,10 @@ public class Menus extends Application {
         hbox1.setAlignment(Pos.CENTER);
         Button generator = new Button("Generator");
         Button loadMaze = new Button("Load maze");
+        generator.setPrefWidth(100);
+        loadMaze.setPrefWidth(100);
+        generator.setPrefHeight(50);
+        loadMaze.setPrefHeight(50);
         hbox1.getChildren().addAll(generator,loadMaze);
         root.setCenter(hbox1);
 
@@ -116,9 +121,8 @@ public class Menus extends Application {
 
 
         //DEBUG
-        Button debug1 = new Button("Show maze");
-        BorderPane.setAlignment(debug1, Pos.BOTTOM_RIGHT);
-        root.setRight(debug1);
+        Button debug1 = new Button("Show maze (debug)");
+        hbox1.getChildren().add(debug1);
         debug1.setOnAction(e -> {
             showMaze(primaryStage);
         });
@@ -138,6 +142,7 @@ public class Menus extends Application {
         HBox hbox1 = new HBox();
         hbox1.setPadding(new Insets(10));
         hbox1.setSpacing(10);
+        hbox1.setAlignment(Pos.CENTER);
         //Length of maze
         TextField posX = new TextField();
         posX.setPromptText("X");
@@ -160,11 +165,56 @@ public class Menus extends Application {
         root.setTop(hbox1);
 
         //Center of scene
-        //text : type de résolution
-        //liste de checkbox
-        //AStar Djikstra, Euclidean, Manhattan
-        //Tremaux
+        VBox vbox1 = new VBox();
+        vbox1.setPadding(new Insets(10));
+        vbox1.setSpacing(10);
+        vbox1.setAlignment(Pos.CENTER);
+        //CheckBox list
+        Label text1 = new Label("Resolution algorithm :");
+        /*CheckBox check1 = new CheckBox("AStar Djikstra");
+        CheckBox check2 = new CheckBox("AStar Euclidean");
+        CheckBox check3 = new CheckBox("AStar Manhattan");
+        CheckBox check4 = new CheckBox("Tremaux");
+        vbox1.getChildren().addAll(text1,check1,check2,check3,check4);*/
+        RadioButton radio1 = new RadioButton("AStar Djikstra");
+        RadioButton radio2 = new RadioButton("AStar Euclidean");
+        RadioButton radio3 = new RadioButton("AStar Manhattan");
+        RadioButton radio4 = new RadioButton("Tremaux");
+        ToggleGroup group = new ToggleGroup();
+        radio1.setToggleGroup(group);
+        radio2.setToggleGroup(group);
+        radio3.setToggleGroup(group);
+        radio4.setToggleGroup(group);
+        vbox1.getChildren().addAll(text1,radio1,radio2,radio3,radio4);
+        root.setCenter(vbox1);
 
         //Bottom of scene
+        HBox hbox2 = new HBox();
+        hbox2.setPadding(new Insets(10));
+        hbox2.setSpacing(30);
+        hbox2.setAlignment(Pos.CENTER);
+        Button back = new Button("Back");
+        Button loadState = new Button("Load state");
+        Button begin = new Button("Begin");
+        back.setPrefWidth(100);
+        loadState.setPrefWidth(100);
+        begin.setPrefWidth(100);
+        back.setPrefHeight(50);
+        loadState.setPrefHeight(50);
+        begin.setPrefHeight(50);
+        hbox2.getChildren().addAll(back,loadState,begin);
+        root.setBottom(hbox2);
+
+        back.setOnAction(e -> {
+            start(primaryStage);
+        });
+        loadState.setOnAction(e -> {
+            // !!!!!!!!
+        });
+        begin.setOnAction(e -> {
+            // !!!!!!!
+        });
+
+
     }
 }
