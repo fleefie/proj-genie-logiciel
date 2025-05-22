@@ -278,9 +278,10 @@ public class Menus extends Application {
         hbox3.setAlignment(Pos.CENTER);
         Button back = new Button("Back");
         Button endGen = new Button("End generation");
+        Slider slideBar = new Slider(10,1000,10);
         back.setPrefSize(100,50);
         endGen.setPrefSize(100,50);
-        hbox3.getChildren().addAll(back,endGen);
+        hbox3.getChildren().addAll(back,slideBar,endGen);
         root.setBottom(hbox3);
 
         //TODO:
