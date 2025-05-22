@@ -4,6 +4,8 @@ import fr.cytech.projetgenielogiciel.maze.builder.DfsBuilder;
 import fr.cytech.projetgenielogiciel.maze.builder.IBuilder;
 import fr.cytech.projetgenielogiciel.maze.solver.ISolver;
 import fr.cytech.projetgenielogiciel.maze.solver.TremauxSolver;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -16,7 +18,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
+import java.sql.Time;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Menus extends Application {
@@ -25,7 +29,6 @@ public class Menus extends Application {
         launch(args);
     }
 
-    //@Override
     public void showMaze(Stage primaryStage) {
 
         BorderPane root = new BorderPane();
@@ -159,12 +162,8 @@ public class Menus extends Application {
         algorithmChoice.getItems().addAll("DFS", "BFS");
         algorithmChoice.setPromptText("Algorithm");
         algorithmChoice.setPrefWidth(120);
-        //Seed selection
-        TextField seed = new TextField();
-        seed.setPromptText("Seed");
-        seed.setPrefWidth(70);
         //Add into hbox
-        hbox1.getChildren().addAll(posX,posY,algorithmChoice,seed);
+        hbox1.getChildren().addAll(posX,posY,algorithmChoice);
         //BorderPane.setAlignment(hbox1, Pos.TOP_CENTER);
         root.setTop(hbox1);
 
@@ -173,23 +172,20 @@ public class Menus extends Application {
         vbox1.setPadding(new Insets(10));
         vbox1.setSpacing(10);
         vbox1.setAlignment(Pos.CENTER);
-        //CheckBox list
-        Label text1 = new Label("Resolution algorithm :");
-        /*CheckBox check1 = new CheckBox("AStar Djikstra");
-        CheckBox check2 = new CheckBox("AStar Euclidean");
-        CheckBox check3 = new CheckBox("AStar Manhattan");
-        CheckBox check4 = new CheckBox("Tremaux");
-        vbox1.getChildren().addAll(text1,check1,check2,check3,check4);*/
-        RadioButton radio1 = new RadioButton("AStar Djikstra");
-        RadioButton radio2 = new RadioButton("AStar Euclidean");
-        RadioButton radio3 = new RadioButton("AStar Manhattan");
-        RadioButton radio4 = new RadioButton("Tremaux");
-        ToggleGroup group = new ToggleGroup();
-        radio1.setToggleGroup(group);
-        radio2.setToggleGroup(group);
-        radio3.setToggleGroup(group);
-        radio4.setToggleGroup(group);
-        vbox1.getChildren().addAll(text1,radio1,radio2,radio3,radio4);
+        //Coordinates to the start of the maze generation
+        Label text1 = new Label("Start of maze generation :");
+        TextField startX = new TextField();
+        startX.setPromptText("X");
+        startX.setPrefSize(40,20); //TODO MARCHE PAS LES 3
+        TextField startY = new TextField();
+        startY.setPromptText("Y");
+        startY.setPrefSize(40,20);
+        //Seed selection
+        TextField seed = new TextField();
+        seed.setPromptText("Seed");
+        seed.setPrefSize(70,20);
+
+        vbox1.getChildren().addAll(text1,startX,startY,seed);
         root.setCenter(vbox1);
 
         //Bottom of scene
@@ -210,7 +206,7 @@ public class Menus extends Application {
             start(primaryStage);
         });
         loadState.setOnAction(e -> {
-            // Faire popup pour récupérer un fichier
+            //TODO Faire popup pour récupérer un fichier
         });
         begin.setOnAction(e -> {
             mazeGeneration(primaryStage);
@@ -220,6 +216,7 @@ public class Menus extends Application {
     }
 
     private int stepNbr = 0;
+    private boolean isAnimate = false;
     public void mazeGeneration(Stage primaryStage/*, int x, int y, int seed, String algorithm*/){
         //Panel initialization
         BorderPane root = new BorderPane();
@@ -268,8 +265,9 @@ public class Menus extends Application {
         //Center of scene
         HBox vbox2 = new HBox();
         vbox2.setAlignment(Pos.CENTER);
-        Maze maze = new Maze(10, 10);
+        Maze maze = new Maze(10, 10); //X Y a changer
         MazeView mazeView = new MazeView(maze);
+        IBuilder builder = new DfsBuilder(maze,0,0,42);
         vbox2.getChildren().addAll(mazeView);
         root.setCenter(vbox2);
 
@@ -285,15 +283,37 @@ public class Menus extends Application {
         hbox3.getChildren().addAll(back,endGen);
         root.setBottom(hbox3);
 
-
-        //Faire les boutons : saveState, step, finish
-        //Save state : save the current state of the maze in a file
-        //Step : perform a single step of the algorithm
-        //Finish : finish the generation of the maze
+        //TODO:
+        saveState.setOnAction(e -> {
+            //ratio
+        });
         step.setOnAction(e -> {
             stepNbr++;
             step.setText("Step " + stepNbr);
-            //Ajouter maze.step()
+            builder.step();
+            mazeView.update();
+        });
+        finish.setOnAction(e -> {
+            builder.build();
+            mazeView.update();
+        });
+        Timeline solverTimeline = new Timeline();
+        solverTimeline.getKeyFrames().add(new KeyFrame(Duration.millis(100), e -> {
+            boolean keepGoing = builder.step();
+            mazeView.update();
+            if (!keepGoing) {
+                solverTimeline.stop();
+            }
+        }));
+        solverTimeline.setCycleCount(Timeline.INDEFINITE);
+        anim.setOnAction(e -> {
+            if (!isAnimate) {
+                isAnimate = true;
+                solverTimeline.play();
+            } else {
+                isAnimate = false;
+                solverTimeline.stop();
+            }
         });
 
 
@@ -301,10 +321,105 @@ public class Menus extends Application {
             Generator(primaryStage);
         });
         endGen.setOnAction(e -> {
-            // Mettre dans la résolution du labyrinthe
+            //finir la génération du maze puis l'envoyer dans la résolution
+            Resolve(primaryStage/*,mazeView*/);
         });
 
+    }
 
+    public void Resolve(Stage primaryStage/*, MazeView mazeView*/){
+        //Panel initialization
+        BorderPane root = new BorderPane();
+        root.setStyle("-fx-padding: 20;");
+        Scene scene = new Scene(root, 600, 600);
+        primaryStage.setTitle("Generator");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+        //Top of scene
+
+        //Center of scene
+        VBox vbox1 = new VBox();
+        vbox1.setPadding(new Insets(10));
+        vbox1.setSpacing(10);
+        vbox1.setAlignment(Pos.CENTER);
+        //CheckBox list
+        Label text1 = new Label("Resolution algorithm :");
+        RadioButton radio1 = new RadioButton("AStar Djikstra");
+        RadioButton radio2 = new RadioButton("AStar Euclidean");
+        RadioButton radio3 = new RadioButton("AStar Manhattan");
+        RadioButton radio4 = new RadioButton("Tremaux");
+        ToggleGroup group = new ToggleGroup();
+        radio1.setToggleGroup(group);
+        radio2.setToggleGroup(group);
+        radio3.setToggleGroup(group);
+        radio4.setToggleGroup(group);
+        vbox1.getChildren().addAll(text1,radio1,radio2,radio3,radio4);
+        root.setCenter(vbox1);
+
+        //Bottom of scene
+        HBox hbox2 = new HBox();
+        hbox2.setPadding(new Insets(10));
+        hbox2.setSpacing(30);
+        hbox2.setAlignment(Pos.CENTER);
+        Button back = new Button("Back");
+        Button loadState = new Button("Load state");
+        Button begin = new Button("Begin");
+        back.setPrefSize(100,50);
+        loadState.setPrefSize(100,50);
+        begin.setPrefSize(100,50);
+        hbox2.getChildren().addAll(back,loadState,begin);
+        root.setBottom(hbox2);
+
+        back.setOnAction(e -> {
+            start(primaryStage);
+        });
+        loadState.setOnAction(e -> {
+            //TODO Faire popup pour récupérer un fichier
+        });
+        begin.setOnAction(e -> {
+            mazeResolution(primaryStage); //TODO : rajouter les param nécessaires
+            //mazeResolution(primaryStage,x,y,seed,algorithm);
+        });
+
+    }
+
+    public void mazeResolution(Stage primaryStage/*, MazeView mazeView*/){
+        //Panel initialization
+        BorderPane root = new BorderPane();
+        root.setStyle("-fx-padding: 20;");
+        Scene scene = new Scene(root, 600, 600);
+        primaryStage.setTitle("Maze resolution");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+        //Top of scene
+        stepNbr = 0;
+        Image img = new Image("https://icons.veryicon.com/png/o/miscellaneous/winsion/play-button-6.png");
+        ImageView playButtonImg = new ImageView(img);
+        playButtonImg.setFitHeight(20);
+        playButtonImg.setFitWidth(20);
+        playButtonImg.setPreserveRatio(true);
+        //Top buttons
+        HBox hbox1 = new HBox();
+        hbox1.setPadding(new Insets(10));
+        hbox1.setSpacing(5);
+        hbox1.setAlignment(Pos.CENTER);
+        Button saveState = new Button("Save");
+        Button step = new Button("Step 0");
+        Button finish = new Button("Finish");
+        Button anim = new Button();
+        anim.setGraphic(playButtonImg);
+        saveState.setPrefSize(100,28);
+        step.setPrefSize(100,28);
+        finish.setPrefSize(100,28);
+        anim.setPrefSize(28,28);
+        hbox1.getChildren().addAll(saveState,step,finish,anim);
+        //Vbox with top buttons and text
+        VBox vbox1 = new VBox();
+        vbox1.setSpacing(10);
+        hbox1.setAlignment(Pos.CENTER);
+        root.setTop(hbox1);
     }
 
 }
