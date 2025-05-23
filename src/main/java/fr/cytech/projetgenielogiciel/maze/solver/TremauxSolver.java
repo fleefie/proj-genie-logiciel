@@ -6,10 +6,9 @@ import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serializable;
 import java.util.*;
 
-public class TremauxSolver implements ISolver, Serializable {
+public class TremauxSolver implements ISolver {
     @Setter
     @Getter
     protected Maze maze;

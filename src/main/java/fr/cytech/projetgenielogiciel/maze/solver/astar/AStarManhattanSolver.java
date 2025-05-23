@@ -4,12 +4,10 @@ import fr.cytech.projetgenielogiciel.maze.Cell;
 import fr.cytech.projetgenielogiciel.maze.Maze;
 import fr.cytech.projetgenielogiciel.maze.Maze.Position;
 
-import java.io.Serializable;
-
 /**
  * A* implementation using the Manhattan distance as a heuristic.
  */
-public class AStarManhattanSolver extends AStarSolver implements Serializable {
+public class AStarManhattanSolver extends AStarSolver {
     public AStarManhattanSolver(Maze lab, Cell start, Cell end, double distanceFactor, double heuristicFactor) {
         super(lab, start, end, distanceFactor, heuristicFactor);
     }

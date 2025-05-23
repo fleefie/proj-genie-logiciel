@@ -1,6 +1,5 @@
 package fr.cytech.projetgenielogiciel.maze.solver.astar;
 
-import java.io.Serializable;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,7 +18,7 @@ import lombok.Setter;
  *
  * The heuristic should be provided through inheritance
  */
-public abstract class AStarSolver implements ISolver, Serializable {
+public abstract class AStarSolver implements ISolver {
 
     /**
      * Reference to the maze that the solver is using.
