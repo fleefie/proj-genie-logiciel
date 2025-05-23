@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 /**
@@ -46,10 +47,16 @@ public class ApplicationMain extends Application {
         BorderPane.setAlignment(about, Pos.BOTTOM_CENTER);
         root.setBottom(about);
 
-        // Main menu button acctions go here.
+        // Main menu button actions go here.
         generator.setOnAction(e -> new CreateGeneratorScene(primaryStage));
         loadMaze.setOnAction(e -> {
-            /* TODO */
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Load maze from file...");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Text Files", "*.txt")
+            );
+            fileChooser.setSelectedExtensionFilter(fileChooser.getExtensionFilters().get(0));
+            String path = fileChooser.showOpenDialog(primaryStage).getAbsolutePath();
         });
         loadBuilder.setOnAction(e -> {
             /* TODO */
