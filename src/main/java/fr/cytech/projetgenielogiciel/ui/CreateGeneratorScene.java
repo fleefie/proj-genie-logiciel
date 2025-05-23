@@ -1,9 +1,7 @@
 package fr.cytech.projetgenielogiciel.ui;
 
 import fr.cytech.projetgenielogiciel.maze.Maze;
-import fr.cytech.projetgenielogiciel.maze.builder.BfsBuilder;
-import fr.cytech.projetgenielogiciel.maze.builder.DfsBuilder;
-import fr.cytech.projetgenielogiciel.maze.builder.IBuilder;
+import fr.cytech.projetgenielogiciel.maze.builder.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -34,7 +32,7 @@ public class CreateGeneratorScene {
         top.setAlignment(Pos.TOP_LEFT);
 
         ComboBox<String> algorithmChoice = new ComboBox<>();
-        algorithmChoice.getItems().addAll("DFS", "BFS");
+        algorithmChoice.getItems().addAll("DFS", "BFS","Imperfect DFS", "Imperfect BFS");
         algorithmChoice.setPromptText("Select Algorithm");
 
         // Load button
@@ -69,6 +67,10 @@ public class CreateGeneratorScene {
         TextField seed = new TextField();
         seed.setPromptText("Seed [Integer]");
 
+        //percent of walls changed
+        TextField percentOfWalls = new TextField();
+        percentOfWalls.setPromptText("Number between 1 and 100 [Integer]");
+
         /*
          * ALGORITHM PARAMS DISPLAY
          */
@@ -78,7 +80,7 @@ public class CreateGeneratorScene {
             String selected = algorithmChoice.getValue();
 
             switch (selected) {
-                case "DFS":
+                case "DFS", "BFS":
                     paramBox.getChildren().addAll(
                             mazeWidth,
                             mazeHeight,
@@ -86,13 +88,14 @@ public class CreateGeneratorScene {
                             startY,
                             seed);
                     break;
-                case "BFS":
+                case "Imperfect DFS", "Imperfect BFS" :
                     paramBox.getChildren().addAll(
                             mazeWidth,
                             mazeHeight,
                             startX,
                             startY,
-                            seed);
+                            seed,
+                            percentOfWalls);
                     break;
             }
         });
@@ -151,6 +154,8 @@ public class CreateGeneratorScene {
 
                 Integer s = Integer.parseInt(seed.getText());
 
+                Integer p = Integer.parseInt(percentOfWalls.getText());
+
                 IBuilder builder = null;
                 Maze maze = new Maze(w, h);
                 switch (selected) {
@@ -159,6 +164,12 @@ public class CreateGeneratorScene {
                         break;
                     case "BFS":
                         builder = new BfsBuilder(maze, sx, sy, s);
+                        break;
+                    case "Imperfect BFS":
+                        builder = new ImperfectBfsBuilder(maze, sx, sy, s, p);
+                        break;
+                    case "Imperfect DFS":
+                        builder = new ImperfectDfsBuilder(maze, sx, sy, s, p);
                         break;
                 }
 
