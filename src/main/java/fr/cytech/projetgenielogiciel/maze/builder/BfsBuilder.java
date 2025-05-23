@@ -30,7 +30,7 @@ public class BfsBuilder implements IBuilder {
     /**
      * Whether the builder is finished building.
      */
-    private Boolean finished = false;
+    protected Boolean finished = false;
 
     /**
      * The current cell of the builder, in case it needs to be paused.

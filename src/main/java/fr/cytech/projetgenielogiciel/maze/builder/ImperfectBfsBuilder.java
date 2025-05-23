@@ -1,95 +1,109 @@
 package fr.cytech.projetgenielogiciel.maze.builder;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+
 import fr.cytech.projetgenielogiciel.maze.Direction;
 import fr.cytech.projetgenielogiciel.maze.Maze;
-import fr.cytech.projetgenielogiciel.maze.Maze.Position;
 import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 /**
- * Implements an imperfect maze builder using a Bfs algorithm as a base.
+ * Class to build an imperfect maze using a BFS as a base.
  */
 public class ImperfectBfsBuilder extends BfsBuilder {
-    /**
-     * Number of walls that will be change randomly.
-     */
-    private Integer numberOfChangedWall;
 
     /**
-     * List of the 4 different possible directions.
+     * Probability of opening a wall during the imperfect phase.
      */
-    private final List<Direction> directions = new ArrayList<>(Arrays.asList(
-            Direction.NORTH,
-            Direction.SOUTH,
-            Direction.EAST,
-            Direction.WEST));
+    private final Double wallOpenProbability;
 
     /**
-     * Constructor.
+     * Phase of the algorithm:
+     * 0 = DFS
+     * 1 = Imperfect
+     */
+    private Integer phase = 0;
+
+    /**
+     * Current X position in the maze for the imperfect phase.
+     */
+    private Integer currentX = 0;
+
+    /**
+     * Current Y position in the maze for the imperfect phase.
+     */
+    private Integer currentY = 0;
+
+    /**
+     * Random number generator for the imperfect phase.
+     */
+    private final Random rand;
+
+    /**
+     * Constructor for the ImperfectBfsBuilder.
      *
-     * @param maze          Reference to the maze being worked on.
-     * @param startx        starting X position.
-     * @param starty        starting Y position.
-     * @param seed          seed for the RNG
-     * @param percentOfWall percent of walls that will be changed
+     * @param maze                The maze to build.
+     * @param startx              The starting x position.
+     * @param starty              The starting y position.
+     * @param seed                The seed for the random number generator.
+     * @param wallOpenProbability The probability of opening a wall during the
+     *                            imperfect phase.
      */
-    public ImperfectBfsBuilder(Maze maze, Integer startx, Integer starty, Integer seed, Integer percentOfWall) {
+    public ImperfectBfsBuilder(Maze maze, Integer startx, Integer starty, Integer seed, Integer wallOpenProbability) {
         super(maze, startx, starty, seed);
-        this.numberOfChangedWall = (startx-1)*(starty-1)*percentOfWall/100;
+        this.wallOpenProbability = wallOpenProbability / 100.0;
+        this.rand = new Random(seed);
     }
 
-    /**
-     * Executes a step of the Bfs.
-     * A step is considered over once we process the next cell in the queue.
-     * Or changes an internal wall of the maze.
-     * A step is considered over once a connection between 2 cells has been changed.
-     *
-     * @return whether a step could be executed.
-     */
     @Override
-    public Boolean step (){
-        if (super.step()){
+    public Boolean step() {
+        // Phase 0: DFS
+        if (phase == 0) {
+            if (super.step())
+                return true;
+            finished = false;
+            phase = 1;
+            currentX = 0;
+            currentY = 0;
+            maze.resetColors();
+            maze.getCell(currentX, currentY).setColor(Color.RED);
+        }
+
+        // Phase 1: Imperfection phase
+        if (super.finished == false) {
+            if (rand.nextDouble() < wallOpenProbability) {
+                List<Direction> dirs = Arrays.asList(Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
+                Collections.shuffle(dirs, rand);
+                Direction d = dirs.get(0);
+                Integer nx = currentX + d.getX();
+                Integer ny = currentY + d.getY();
+                if (nx >= 0 && nx <= maze.getWidth() && ny >= 0 && ny <= maze.getHeight()) {
+                    if (!maze.hasConnection(currentX, currentY, d)) {
+                        maze.connect(currentX, currentY, d);
+                    }
+                }
+            }
+
+            maze.getCell(currentX, currentY).setColor(Color.BLUE);
+
+            currentX++;
+            if (currentX > maze.getWidth()) {
+                currentX = 0;
+                currentY++;
+                if (currentY > maze.getHeight()) {
+                    super.finished = true;
+                    return true;
+                }
+            }
+
+            maze.getCell(currentX, currentY).setColor(Color.RED);
+
+            super.finished = false;
             return true;
         }
-        else {
-            if (this.numberOfChangedWall>0) {
-                int x = getRand().nextInt(this.maze.getWidth());
-                int y = getRand().nextInt(this.maze.getHeight());
-                Position target;
-                int indexDirection;
-                do {
-                    indexDirection = getRand().nextInt(4);
-                    target = new Position(
-                            x + directions.get(indexDirection).getX(),
-                            y + directions.get(indexDirection).getY());
-                } while (!isValidTarget(target));
-                this.maze.getCell(target.x(), target.y()).setColor(Color.RED);
-                if (this.maze.hasConnection(x, y, directions.get(indexDirection))){
-                    this.maze.disconnect(x, y, directions.get(indexDirection));
-                } else {
-                    this.maze.connect(x, y, directions.get(indexDirection));
-                }
-                --this.numberOfChangedWall;
-                this.maze.getCell(target.x(), target.y()).setColor(Color.GREEN);
-                return true;
-            }
-            else {
-                return false;
-            }
-        }
-    }
 
-    /**
-     * Whether the building process is finished.
-     *
-     * @return if the building process is finished
-     */
-    @Override
-    public Boolean isFinished(){
-        return ((this.numberOfChangedWall == 0));
+        return false;
     }
-
 }

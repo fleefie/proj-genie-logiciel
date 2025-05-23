@@ -36,7 +36,7 @@ public class CreateGeneratorScene {
         top.setAlignment(Pos.TOP_LEFT);
 
         ComboBox<String> algorithmChoice = new ComboBox<>();
-        algorithmChoice.getItems().addAll("DFS", "BFS","Imperfect DFS", "Imperfect BFS");
+        algorithmChoice.getItems().addAll("DFS", "BFS", "Imperfect DFS", "Imperfect BFS");
         algorithmChoice.setPromptText("Select Algorithm");
 
         // Load button
@@ -71,9 +71,9 @@ public class CreateGeneratorScene {
         TextField seed = new TextField();
         seed.setPromptText("Seed [Integer]");
 
-        //percent of walls changed
-        TextField percentOfWalls = new TextField();
-        percentOfWalls.setPromptText("Number between 1 and 100 [Integer]");
+        // percent of walls changed
+        TextField wallImperfectionProbability = new TextField();
+        wallImperfectionProbability.setPromptText("Percentage of cells with extra walls opened [Integer]");
 
         /*
          * ALGORITHM PARAMS DISPLAY
@@ -92,14 +92,14 @@ public class CreateGeneratorScene {
                             startY,
                             seed);
                     break;
-                case "Imperfect DFS", "Imperfect BFS" :
+                case "Imperfect DFS", "Imperfect BFS":
                     paramBox.getChildren().addAll(
                             mazeWidth,
                             mazeHeight,
                             startX,
                             startY,
                             seed,
-                            percentOfWalls);
+                            wallImperfectionProbability);
                     break;
             }
         });
@@ -181,7 +181,7 @@ public class CreateGeneratorScene {
 
                 Integer s = Integer.parseInt(seed.getText());
 
-                Integer p = Integer.parseInt(percentOfWalls.getText());
+                Integer p = Integer.parseInt(wallImperfectionProbability.getText());
 
                 IBuilder builder = null;
                 Maze maze = new Maze(w, h);
