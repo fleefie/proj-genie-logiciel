@@ -8,8 +8,8 @@ import fr.cytech.projetgenielogiciel.maze.Maze.Position;
  * A* implementation using the Euclidean distance as a heuristic.
  */
 public class AStarEuclideanSolver extends AStarSolver {
-    public AStarEuclideanSolver(Maze lab, Cell start, Cell end, double pondG, double pondH) {
-        super(lab, start, end, pondG, pondH);
+    public AStarEuclideanSolver(Maze lab, Cell start, Cell end, double distanceFactor, double heuristicFactor) {
+        super(lab, start, end, distanceFactor, heuristicFactor);
     }
 
     @Override

@@ -3,27 +3,24 @@ package fr.cytech.projetgenielogiciel.maze.builder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Deque;
 import java.util.Random;
 import java.util.Set;
 
 import fr.cytech.projetgenielogiciel.maze.Direction;
 import fr.cytech.projetgenielogiciel.maze.Maze;
+import fr.cytech.projetgenielogiciel.maze.Maze.Position;
 import javafx.scene.paint.Color;
+import lombok.Getter;
 
 /**
  * Implements a perfect maze builder using a BFS algorithm.
  */
 public class BfsBuilder implements IBuilder {
-    /**
-     * Record for holding a cell's position.
-     */
-    record Position(Integer x, Integer y) {
-    };
 
     /**
      * Holds the set of cells that were visited.
@@ -48,12 +45,13 @@ public class BfsBuilder implements IBuilder {
     /**
      * Random generator.
      */
+    @Getter
     private final Random rand;
 
     /**
      * Reference to the maze that the builder is working on
      */
-    private final Maze maze;
+    protected final Maze maze;
 
     /**
      * Constructor.
@@ -174,7 +172,7 @@ public class BfsBuilder implements IBuilder {
      * 
      * @param target the position of the target cell.
      */
-    private Boolean isValidTarget(Position target) {
+    protected Boolean isValidTarget(Position target) {
         return (target.x() >= 0 && target.x() <= maze.getWidth()
                 && target.y() >= 0 && target.y() <= maze.getHeight()
                 && !visited.contains(target));
