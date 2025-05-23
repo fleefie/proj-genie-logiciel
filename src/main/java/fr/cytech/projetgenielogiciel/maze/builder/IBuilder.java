@@ -2,6 +2,7 @@ package fr.cytech.projetgenielogiciel.maze.builder;
 
 import fr.cytech.projetgenielogiciel.Serialiseur;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Iterator;
  *
  * @author fleefie
  */
-public interface IBuilder extends Iterable<Boolean> {
+public interface IBuilder extends Iterable<Boolean>,Serializable {
     /**
      * Runs a single step of the building process.
      *

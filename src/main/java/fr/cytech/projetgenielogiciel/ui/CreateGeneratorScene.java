@@ -1,9 +1,11 @@
 package fr.cytech.projetgenielogiciel.ui;
 
+import fr.cytech.projetgenielogiciel.Serialiseur;
 import fr.cytech.projetgenielogiciel.maze.Maze;
 import fr.cytech.projetgenielogiciel.maze.builder.BfsBuilder;
 import fr.cytech.projetgenielogiciel.maze.builder.DfsBuilder;
 import fr.cytech.projetgenielogiciel.maze.builder.IBuilder;
+import fr.cytech.projetgenielogiciel.maze.solver.ISolver;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -16,7 +18,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class CreateGeneratorScene {
 
@@ -118,7 +123,32 @@ public class CreateGeneratorScene {
 
         // Load state
         load.setOnAction(e -> {
-            /* TODO */
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Load builder from file...");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Text Files", "*.ser")
+            );
+            fileChooser.setSelectedExtensionFilter(fileChooser.getExtensionFilters().get(0));
+            String path = fileChooser.showOpenDialog(stage).getAbsolutePath();
+            System.out.println("GO");
+            try {
+                // Sérialisation du labyrinthe
+                Serialiseur.deserialiser(path, IBuilder.class);
+
+                // Confirmation à l'utilisateur
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Succès");
+                alert.setHeaderText("Labyrinthe enregistré !");
+                alert.setContentText("Emplacement : " + path);
+                alert.showAndWait();
+
+            } catch (IOException | ClassNotFoundException ex) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Erreur");
+                errorAlert.setHeaderText("Échec de l'enregistrement");
+                errorAlert.setContentText(ex.getMessage());
+                errorAlert.showAndWait();
+            }
         });
 
         // Create the builder

@@ -1,8 +1,9 @@
 package fr.cytech.projetgenielogiciel.maze.solver;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
-public interface ISolver extends Iterable<Boolean> {
+public interface ISolver extends Iterable<Boolean>, Serializable {
     /**
      * Runs a single step of the solving process.
      *

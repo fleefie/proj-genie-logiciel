@@ -2,6 +2,8 @@ package fr.cytech.projetgenielogiciel.ui;
 
 import fr.cytech.projetgenielogiciel.Serialiseur;
 import fr.cytech.projetgenielogiciel.maze.Maze;
+import fr.cytech.projetgenielogiciel.maze.builder.IBuilder;
+import fr.cytech.projetgenielogiciel.maze.solver.ISolver;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -90,10 +92,53 @@ public class ApplicationMain extends Application {
             );
             fileChooser.setSelectedExtensionFilter(fileChooser.getExtensionFilters().get(0));
             String path = fileChooser.showOpenDialog(primaryStage).getAbsolutePath();
+            System.out.println("GO");
+            try {
+                // Sérialisation du labyrinthe
+                Serialiseur.deserialiser(path, IBuilder.class);
 
+                // Confirmation à l'utilisateur
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Succès");
+                alert.setHeaderText("Labyrinthe enregistré !");
+                alert.setContentText("Emplacement : " + path);
+                alert.showAndWait();
+
+            } catch (IOException | ClassNotFoundException ex) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Erreur");
+                errorAlert.setHeaderText("Échec de l'enregistrement");
+                errorAlert.setContentText(ex.getMessage());
+                errorAlert.showAndWait();
+            }
         });
         loadSolver.setOnAction(e -> {
-            /* TODO */
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Load builder from file...");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Text Files", "*.ser")
+            );
+            fileChooser.setSelectedExtensionFilter(fileChooser.getExtensionFilters().get(0));
+            String path = fileChooser.showOpenDialog(primaryStage).getAbsolutePath();
+            System.out.println("GO");
+            try {
+                // Sérialisation du labyrinthe
+                Serialiseur.deserialiser(path, ISolver.class);
+
+                // Confirmation à l'utilisateur
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Succès");
+                alert.setHeaderText("Labyrinthe enregistré !");
+                alert.setContentText("Emplacement : " + path);
+                alert.showAndWait();
+
+            } catch (IOException | ClassNotFoundException ex) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Erreur");
+                errorAlert.setHeaderText("Échec de l'enregistrement");
+                errorAlert.setContentText(ex.getMessage());
+                errorAlert.showAndWait();
+            }
         });
         about.setOnAction(e -> new AboutScene(primaryStage));
     }

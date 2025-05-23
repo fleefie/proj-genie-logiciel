@@ -2,9 +2,11 @@ package fr.cytech.projetgenielogiciel.ui;
 
 import fr.cytech.projetgenielogiciel.Serialiseur;
 import fr.cytech.projetgenielogiciel.maze.Maze;
+import fr.cytech.projetgenielogiciel.maze.solver.ISolver;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -65,7 +67,32 @@ public class MazeDisplayScene {
 
         // Load a maze
         load.setOnAction(e -> {
-            /* TODO */
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Load builder from file...");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Text Files", "*.ser")
+            );
+            fileChooser.setSelectedExtensionFilter(fileChooser.getExtensionFilters().get(0));
+            String path = fileChooser.showOpenDialog(stage).getAbsolutePath();
+            System.out.println("GO");
+            try {
+                // Sérialisation du labyrinthe
+                Serialiseur.deserialiser(path, Maze.class);
+
+                // Confirmation à l'utilisateur
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Succès");
+                alert.setHeaderText("Labyrinthe enregistré !");
+                alert.setContentText("Emplacement : " + path);
+                alert.showAndWait();
+
+            } catch (IOException | ClassNotFoundException ex) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Erreur");
+                errorAlert.setHeaderText("Échec de l'enregistrement");
+                errorAlert.setContentText(ex.getMessage());
+                errorAlert.showAndWait();
+            }
         });
 
         // Save the maze
