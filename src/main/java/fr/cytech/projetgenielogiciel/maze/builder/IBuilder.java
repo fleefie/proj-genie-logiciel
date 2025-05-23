@@ -1,9 +1,9 @@
 package fr.cytech.projetgenielogiciel.maze.builder;
 
-import fr.cytech.projetgenielogiciel.Serialiseur;
-
 import java.io.Serializable;
 import java.util.Iterator;
+
+import fr.cytech.projetgenielogiciel.maze.Maze;
 
 /**
  * Interface defining a maze builder.
@@ -13,7 +13,7 @@ import java.util.Iterator;
  *
  * @author fleefie
  */
-public interface IBuilder extends Iterable<Boolean>,Serializable {
+public interface IBuilder extends Iterable<Boolean>, Serializable {
     /**
      * Runs a single step of the building process.
      *
@@ -43,4 +43,11 @@ public interface IBuilder extends Iterable<Boolean>,Serializable {
      * @return Whether the builder has finished building
      */
     public Boolean isFinished();
+
+    /**
+     * Getst he builder's maze.
+     *
+     * @return The maze of the builder.
+     */
+    public Maze getMaze();
 }

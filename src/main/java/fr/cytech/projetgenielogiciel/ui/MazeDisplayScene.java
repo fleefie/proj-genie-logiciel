@@ -1,8 +1,7 @@
 package fr.cytech.projetgenielogiciel.ui;
 
-import fr.cytech.projetgenielogiciel.Serialiseur;
+import fr.cytech.projetgenielogiciel.Serializer;
 import fr.cytech.projetgenielogiciel.maze.Maze;
-import fr.cytech.projetgenielogiciel.maze.solver.ISolver;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -13,7 +12,6 @@ import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.io.IOException;
 
 /**
@@ -70,27 +68,25 @@ public class MazeDisplayScene {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Load maze from file...");
             fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("Text Files", "*.ser")
-            );
+                    new FileChooser.ExtensionFilter("Text Files", "*.ser"));
             fileChooser.setSelectedExtensionFilter(fileChooser.getExtensionFilters().get(0));
-            String path = fileChooser.showOpenDialog(stage).getAbsolutePath();
-            System.out.println("GO");
             try {
-                // Sérialisation du labyrinthe
-                Serialiseur.deserialiser(path, Maze.class);
 
-                // Confirmation à l'utilisateur
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Succès");
-                alert.setHeaderText("Labyrinthe chargé !");
-                alert.setContentText("Emplacement : " + path);
-                alert.showAndWait();
+                String path = fileChooser.showOpenDialog(stage).getAbsolutePath();
+                Maze loadedMaze = Serializer.deserialize(path, Maze.class);
 
+                new MazeDisplayScene(stage, loadedMaze);
             } catch (IOException | ClassNotFoundException ex) {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-                errorAlert.setTitle("Erreur");
-                errorAlert.setHeaderText("Échec de l'enregistrement");
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Failed to load maze");
                 errorAlert.setContentText(ex.getMessage());
+                errorAlert.showAndWait();
+            } catch (NullPointerException ex) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Failed to load maze");
+                errorAlert.setContentText("No file selected.");
                 errorAlert.showAndWait();
             }
         });
@@ -100,26 +96,23 @@ public class MazeDisplayScene {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Load maze from file...");
             fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("Text Files", "*.ser")
-            );
+                    new FileChooser.ExtensionFilter("Text Files", "*.ser"));
             fileChooser.setSelectedExtensionFilter(fileChooser.getExtensionFilters().get(0));
-            String path = fileChooser.showSaveDialog(stage).getAbsolutePath();
             try {
-                // Sérialisation du labyrinthe
-                Serialiseur.serialiser(maze,path);
 
-                // Confirmation à l'utilisateur
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Succès");
-                alert.setHeaderText("Labyrinthe sauvegardé !");
-                alert.setContentText("Emplacement : " + path);
-                alert.showAndWait();
-
+                String path = fileChooser.showSaveDialog(stage).getAbsolutePath();
+                Serializer.serialize(maze, path);
             } catch (IOException ex) {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-                errorAlert.setTitle("Erreur");
-                errorAlert.setHeaderText("Échec de l'enregistrement");
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Failed to save maze");
                 errorAlert.setContentText(ex.getMessage());
+                errorAlert.showAndWait();
+            } catch (NullPointerException ex) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Failed to save maze");
+                errorAlert.setContentText("No file selected.");
                 errorAlert.showAndWait();
             }
 

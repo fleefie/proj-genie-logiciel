@@ -1,6 +1,8 @@
 package fr.cytech.projetgenielogiciel.ui;
 
-import fr.cytech.projetgenielogiciel.Serialiseur;
+import java.io.IOException;
+
+import fr.cytech.projetgenielogiciel.Serializer;
 import fr.cytech.projetgenielogiciel.maze.Cell;
 import fr.cytech.projetgenielogiciel.maze.Maze;
 import fr.cytech.projetgenielogiciel.maze.solver.ISolver;
@@ -22,8 +24,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 
 /**
  * Scene representing the solver setup scene.
@@ -69,7 +69,6 @@ public class CreateSolverScene {
 
         /*
          * Yes, this is ugly. No, I do not care.
-         * TODO: Make this prettier because I do care.
          *
          * It should be trivial to add in new solver types thanks to this structure.
          */
@@ -166,27 +165,25 @@ public class CreateSolverScene {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Load builder from file...");
             fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("Text Files", "*.ser")
-            );
+                    new FileChooser.ExtensionFilter("Text Files", "*.ser"));
             fileChooser.setSelectedExtensionFilter(fileChooser.getExtensionFilters().get(0));
-            String path = fileChooser.showOpenDialog(stage).getAbsolutePath();
-            System.out.println("GO");
             try {
-                // Sérialisation du labyrinthe
-                Serialiseur.deserialiser(path, ISolver.class);
 
-                // Confirmation à l'utilisateur
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Succès");
-                alert.setHeaderText("solver chargé !");
-                alert.setContentText("Emplacement : " + path);
-                alert.showAndWait();
+                String path = fileChooser.showOpenDialog(stage).getAbsolutePath();
+                ISolver solver = Serializer.deserialize(path, ISolver.class);
 
+                new MazeSolvingScene(stage, solver.getMaze(), solver);
             } catch (IOException | ClassNotFoundException ex) {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-                errorAlert.setTitle("Erreur");
-                errorAlert.setHeaderText("Échec de l'enregistrement");
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Failed to load solver state.");
                 errorAlert.setContentText(ex.getMessage());
+                errorAlert.showAndWait();
+            } catch (NullPointerException ex) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Failed to load solver state.");
+                errorAlert.setContentText("No file selected.");
                 errorAlert.showAndWait();
             }
         });

@@ -1,8 +1,7 @@
 package fr.cytech.projetgenielogiciel.ui;
 
-import fr.cytech.projetgenielogiciel.Serialiseur;
+import fr.cytech.projetgenielogiciel.Serializer;
 import fr.cytech.projetgenielogiciel.maze.Maze;
-import fr.cytech.projetgenielogiciel.maze.builder.IBuilder;
 import fr.cytech.projetgenielogiciel.maze.solver.ISolver;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -167,27 +166,25 @@ public class MazeSolvingScene {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Load Solver from file...");
             fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("Text Files", "*.ser")
-            );
+                    new FileChooser.ExtensionFilter("Text Files", "*.ser"));
             fileChooser.setSelectedExtensionFilter(fileChooser.getExtensionFilters().get(0));
-            String path = fileChooser.showOpenDialog(stage).getAbsolutePath();
-            System.out.println("GO");
             try {
-                // Sérialisation du labyrinthe
-                Serialiseur.deserialiser(path, ISolver.class);
 
-                // Confirmation à l'utilisateur
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Succès");
-                alert.setHeaderText("solver chargé !");
-                alert.setContentText("Emplacement : " + path);
-                alert.showAndWait();
+                String path = fileChooser.showOpenDialog(stage).getAbsolutePath();
+                ISolver localsolver = Serializer.deserialize(path, ISolver.class);
 
+                new MazeSolvingScene(stage, maze, localsolver);
             } catch (IOException | ClassNotFoundException ex) {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-                errorAlert.setTitle("Erreur");
-                errorAlert.setHeaderText("Échec de l'enregistrement");
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Failed to load solver state.");
                 errorAlert.setContentText(ex.getMessage());
+                errorAlert.showAndWait();
+            } catch (NullPointerException ex) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Failed to load solver state.");
+                errorAlert.setContentText("No file selected.");
                 errorAlert.showAndWait();
             }
         });
@@ -197,27 +194,23 @@ public class MazeSolvingScene {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Load solver from file...");
             fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("Text Files", "*.ser")
-            );
+                    new FileChooser.ExtensionFilter("Text Files", "*.ser"));
             fileChooser.setSelectedExtensionFilter(fileChooser.getExtensionFilters().get(0));
-            String path = fileChooser.showSaveDialog(stage).getAbsolutePath();
-            System.out.println("GO");
             try {
-                // Sérialisation du labyrinthe
-                Serialiseur.serialiser(solver,path);
 
-                // Confirmation à l'utilisateur
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Succès");
-                alert.setHeaderText("solver enregistré !");
-                alert.setContentText("Emplacement : " + path);
-                alert.showAndWait();
-
+                String path = fileChooser.showSaveDialog(stage).getAbsolutePath();
+                Serializer.serialize(solver, path);
             } catch (IOException ex) {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-                errorAlert.setTitle("Erreur");
-                errorAlert.setHeaderText("Échec de l'enregistrement");
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Failed to save solver state.");
                 errorAlert.setContentText(ex.getMessage());
+                errorAlert.showAndWait();
+            } catch (NullPointerException ex) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Failed to save solver state.");
+                errorAlert.setContentText("No file selected.");
                 errorAlert.showAndWait();
             }
         });

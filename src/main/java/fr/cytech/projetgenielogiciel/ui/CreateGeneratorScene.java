@@ -1,11 +1,10 @@
 package fr.cytech.projetgenielogiciel.ui;
 
-import fr.cytech.projetgenielogiciel.Serialiseur;
+import fr.cytech.projetgenielogiciel.Serializer;
 import fr.cytech.projetgenielogiciel.maze.Maze;
 import fr.cytech.projetgenielogiciel.maze.builder.BfsBuilder;
 import fr.cytech.projetgenielogiciel.maze.builder.DfsBuilder;
 import fr.cytech.projetgenielogiciel.maze.builder.IBuilder;
-import fr.cytech.projetgenielogiciel.maze.solver.ISolver;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -126,27 +125,25 @@ public class CreateGeneratorScene {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Load builder from file...");
             fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("Text Files", "*.ser")
-            );
+                    new FileChooser.ExtensionFilter("Text Files", "*.ser"));
             fileChooser.setSelectedExtensionFilter(fileChooser.getExtensionFilters().get(0));
-            String path = fileChooser.showOpenDialog(stage).getAbsolutePath();
-            System.out.println("GO");
             try {
-                // Sérialisation du labyrinthe
-                Serialiseur.deserialiser(path, IBuilder.class);
 
-                // Confirmation à l'utilisateur
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Succès");
-                alert.setHeaderText("builder chargé !");
-                alert.setContentText("Emplacement : " + path);
-                alert.showAndWait();
+                String path = fileChooser.showOpenDialog(stage).getAbsolutePath();
+                IBuilder builder = Serializer.deserialize(path, IBuilder.class);
 
+                new MazeGenerationScene(stage, builder.getMaze(), builder);
             } catch (IOException | ClassNotFoundException ex) {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-                errorAlert.setTitle("Erreur");
-                errorAlert.setHeaderText("Échec de l'enregistrement");
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Failed to load builder");
                 errorAlert.setContentText(ex.getMessage());
+                errorAlert.showAndWait();
+            } catch (NullPointerException ex) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Failed to load builder");
+                errorAlert.setContentText("No file selected.");
                 errorAlert.showAndWait();
             }
         });

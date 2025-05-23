@@ -13,6 +13,7 @@ import fr.cytech.projetgenielogiciel.maze.Direction;
 import fr.cytech.projetgenielogiciel.maze.Maze;
 import fr.cytech.projetgenielogiciel.maze.Maze.Position;
 import javafx.scene.paint.Color;
+import lombok.Getter;
 
 /**
  * Maze builder using Eller's set theory based algorithm.
@@ -40,6 +41,7 @@ import javafx.scene.paint.Color;
 public class EllerBuilder implements IBuilder, Serializable {
 
     private Boolean finished;
+    @Getter
     private final Maze maze;
     private final Random rand;
 
