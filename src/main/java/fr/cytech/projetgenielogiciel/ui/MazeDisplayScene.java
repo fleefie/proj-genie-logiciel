@@ -68,7 +68,7 @@ public class MazeDisplayScene {
         // Load a maze
         load.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Load builder from file...");
+            fileChooser.setTitle("Load maze from file...");
             fileChooser.getExtensionFilters().addAll(
                     new FileChooser.ExtensionFilter("Text Files", "*.ser")
             );
@@ -82,7 +82,7 @@ public class MazeDisplayScene {
                 // Confirmation à l'utilisateur
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Succès");
-                alert.setHeaderText("Labyrinthe enregistré !");
+                alert.setHeaderText("Labyrinthe chargé !");
                 alert.setContentText("Emplacement : " + path);
                 alert.showAndWait();
 
@@ -105,10 +105,22 @@ public class MazeDisplayScene {
             fileChooser.setSelectedExtensionFilter(fileChooser.getExtensionFilters().get(0));
             String path = fileChooser.showSaveDialog(stage).getAbsolutePath();
             try {
-                Serialiseur.serialiser(maze, path);
-                JOptionPane.showMessageDialog(null, "Fichier sauvegardé : " + path);
+                // Sérialisation du labyrinthe
+                Serialiseur.serialiser(maze,path);
+
+                // Confirmation à l'utilisateur
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Succès");
+                alert.setHeaderText("Labyrinthe sauvegardé !");
+                alert.setContentText("Emplacement : " + path);
+                alert.showAndWait();
+
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(null, "Erreur : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Erreur");
+                errorAlert.setHeaderText("Échec de l'enregistrement");
+                errorAlert.setContentText(ex.getMessage());
+                errorAlert.showAndWait();
             }
 
         });

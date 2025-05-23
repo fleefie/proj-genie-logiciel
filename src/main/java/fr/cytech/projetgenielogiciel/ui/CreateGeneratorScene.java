@@ -138,7 +138,7 @@ public class CreateGeneratorScene {
                 // Confirmation à l'utilisateur
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Succès");
-                alert.setHeaderText("Labyrinthe enregistré !");
+                alert.setHeaderText("builder chargé !");
                 alert.setContentText("Emplacement : " + path);
                 alert.showAndWait();
 

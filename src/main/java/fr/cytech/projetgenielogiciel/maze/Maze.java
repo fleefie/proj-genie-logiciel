@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Stack;
@@ -41,7 +42,7 @@ public class Maze implements Serializable {
     /**
      * A record holding an (X, Y) position vector in the maze.
      */
-    public record Position(Integer x, Integer y) {
+    public record Position (Integer x, Integer y) implements Serializable{
     };
 
     /**

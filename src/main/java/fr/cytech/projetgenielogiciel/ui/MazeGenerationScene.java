@@ -1,5 +1,6 @@
 package fr.cytech.projetgenielogiciel.ui;
 
+import fr.cytech.projetgenielogiciel.Serialiseur;
 import fr.cytech.projetgenielogiciel.maze.Maze;
 import fr.cytech.projetgenielogiciel.maze.builder.IBuilder;
 import javafx.animation.KeyFrame;
@@ -7,13 +8,17 @@ import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.io.IOException;
 
 /**
  * Class for the maze generation scene.
@@ -158,12 +163,62 @@ public class MazeGenerationScene {
 
         // Load a generator from a file
         load.setOnAction(e -> {
-            /* TODO */
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Load builder from file...");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Text Files", "*.ser")
+            );
+            fileChooser.setSelectedExtensionFilter(fileChooser.getExtensionFilters().get(0));
+            String path = fileChooser.showOpenDialog(stage).getAbsolutePath();
+            System.out.println("GO");
+            try {
+                // Sérialisation du labyrinthe
+                Serialiseur.deserialiser(path, IBuilder.class);
+
+                // Confirmation à l'utilisateur
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Succès");
+                alert.setHeaderText("Labyrinthe enregistré !");
+                alert.setContentText("Emplacement : " + path);
+                alert.showAndWait();
+
+            } catch (IOException | ClassNotFoundException ex) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Erreur");
+                errorAlert.setHeaderText("Échec de l'enregistrement");
+                errorAlert.setContentText(ex.getMessage());
+                errorAlert.showAndWait();
+            }
         });
 
         // Save a generator from a file
         save.setOnAction(e -> {
-            /* TODO */
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("save builder from file...");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Text Files", "*.ser")
+            );
+            fileChooser.setSelectedExtensionFilter(fileChooser.getExtensionFilters().get(0));
+            String path = fileChooser.showSaveDialog(stage).getAbsolutePath();
+            System.out.println("GO");
+            try {
+                // Sérialisation du labyrinthe
+                Serialiseur.serialiser(builder,path);
+
+                // Confirmation à l'utilisateur
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Succès");
+                alert.setHeaderText("builder enregistré !");
+                alert.setContentText("Emplacement : " + path);
+                alert.showAndWait();
+
+            } catch (IOException ex) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Erreur");
+                errorAlert.setHeaderText("Échec de l'enregistrement");
+                errorAlert.setContentText(ex.getMessage());
+                errorAlert.showAndWait();
+            }
         });
 
         // Go back to the generator setup scene

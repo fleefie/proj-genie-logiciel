@@ -178,7 +178,7 @@ public class CreateSolverScene {
                 // Confirmation à l'utilisateur
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Succès");
-                alert.setHeaderText("Labyrinthe enregistré !");
+                alert.setHeaderText("solver chargé !");
                 alert.setContentText("Emplacement : " + path);
                 alert.showAndWait();
 
