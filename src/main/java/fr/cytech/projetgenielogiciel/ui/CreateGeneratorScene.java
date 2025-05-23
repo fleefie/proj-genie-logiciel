@@ -20,8 +20,16 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Class for the scene of creation of generators.
+ */
 public class CreateGeneratorScene {
 
+    /**
+     * Constructor for the class for the scene of creation of generators.
+     *
+     * @param stage the stage to display the scene to
+     */
     public CreateGeneratorScene(Stage stage) {
         // Scene setup
         BorderPane root = new BorderPane();
@@ -181,7 +189,7 @@ public class CreateGeneratorScene {
 
                 Integer s = Integer.parseInt(seed.getText());
 
-                Integer p = Integer.parseInt(wallImperfectionProbability.getText());
+                Integer p = null;
 
                 IBuilder builder = null;
                 Maze maze = new Maze(w, h);
@@ -193,9 +201,15 @@ public class CreateGeneratorScene {
                         builder = new BfsBuilder(maze, sx, sy, s);
                         break;
                     case "Imperfect BFS":
+                        p = Integer.parseInt(wallImperfectionProbability.getText());
+                        if (p < 0 || p > 100)
+                            throw new IllegalArgumentException();
                         builder = new ImperfectBfsBuilder(maze, sx, sy, s, p);
                         break;
                     case "Imperfect DFS":
+                        p = Integer.parseInt(wallImperfectionProbability.getText());
+                        if (p < 0 || p > 100)
+                            throw new IllegalArgumentException();
                         builder = new ImperfectDfsBuilder(maze, sx, sy, s, p);
                         break;
                 }

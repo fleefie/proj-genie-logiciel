@@ -3,34 +3,61 @@ package fr.cytech.projetgenielogiciel.maze.solver;
 import fr.cytech.projetgenielogiciel.maze.Cell;
 import fr.cytech.projetgenielogiciel.maze.Maze;
 import javafx.scene.paint.Color;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.*;
 
+/**
+ * Class to solve a maze using the Tremaux algorithm.
+ */
 public class TremauxSolver implements ISolver {
-    @Setter
-    @Getter
+    /**
+     * The maze to be solved.
+     */
     protected Maze maze;
+
+    /**
+     * Whether the maze is solved or not.
+     */
     protected boolean solved = false;
+
+    /**
+     * The starting cell.
+     */
     protected Cell start;
+
+    /**
+     * The target cell.
+     */
     protected Cell end;
+
+    /**
+     * The current cell.
+     */
     protected Cell current;
-    protected Map<Integer, Integer> marks; // Map to track how many times each cell has been visited
+
+    /**
+     * The map representing the number of times each cell has been visited.
+     */
+    protected Map<Integer, Integer> marks;
+
+    /**
+     * The currently kept path.
+     */
     protected Stack<Cell> path;
 
     /**
-     * Creator of Solver class
-     * 
-     * @param lab take a maze that will be solved step by step
+     * Constructor for the Tremaux solver.
      *
+     * @param maze  The maze to be solved.
+     * @param start The starting cell.
+     * @param end   The target cell.
      */
-    public TremauxSolver(Maze lab, Cell start, Cell end) {
+    public TremauxSolver(Maze maze, Cell start, Cell end) {
         try {
-            if (lab == null) {
-                throw new IllegalArgumentException("labyrinthe null");
+            if (maze == null) {
+                throw new IllegalArgumentException("Maze cannot be null");
             }
-            this.maze = lab;
+            this.maze = maze;
             this.solved = false;
             this.start = start;
             this.end = end;
@@ -59,7 +86,9 @@ public class TremauxSolver implements ISolver {
     }
 
     /**
-     * Does one step from the cell c
+     * Execute a single step of the Tremaux algorithm.
+     *
+     * @return true if the step was successful, false if nothing was done
      */
     public Boolean step() {
         if (solved) {
@@ -99,7 +128,9 @@ public class TremauxSolver implements ISolver {
     }
 
     /**
-     * Solve the maze by starting from s to f
+     * Execute the entire rest of the solving process.
+     *
+     * @return true if a step was successful, false if nothing was done
      */
     public Boolean solve() {
         if (current == end) {
@@ -116,7 +147,9 @@ public class TremauxSolver implements ISolver {
         }
     }
 
-    // Setup les trucs de bases
+    /**
+     * Iterator over the solving process.
+     */
     private class TremauxIterator implements Iterator<Boolean> {
         @Override
         public boolean hasNext() {
@@ -177,5 +210,13 @@ public class TremauxSolver implements ISolver {
         }
 
         return nextCell;
+    }
+
+    /**
+     * Read accessor for the maze.
+     */
+    @Override
+    public Maze getMaze() {
+        return maze;
     }
 }

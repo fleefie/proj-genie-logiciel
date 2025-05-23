@@ -1,12 +1,7 @@
 package fr.cytech.projetgenielogiciel.maze;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.io.Serializable;
-import java.util.Map;
-import java.util.Stack;
+import java.util.Arrays;
 
 import javafx.scene.paint.Color;
 
@@ -15,27 +10,20 @@ import javafx.scene.paint.Color;
  *
  * A maze is a 2D grid of cells, made out of cells.
  */
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Maze implements Serializable {
     /**
      * The width of the maze.
      */
-    @Getter
-    @EqualsAndHashCode.Include
     private final Integer width;
 
     /**
      * The height of the maze.
      */
-    @Getter
-    @EqualsAndHashCode.Include
     private final Integer height;
 
     /**
      * The cells of the maze.
      */
-    @Getter
-    @EqualsAndHashCode.Include
     private final Cell[][] cells;
 
     /**
@@ -52,16 +40,7 @@ public class Maze implements Serializable {
      * It is nonetheless accessible read-only for debugging purposes, or if
      * an algorithm needs it and it is preferable to not rely on topology.
      */
-    @Getter
-    @EqualsAndHashCode.Include
     private final AdjacencyList adjacencyList = new AdjacencyList();
-
-    @Getter
-    @Setter
-    private Map<Integer, Boolean> visited;
-
-    @Getter
-    private final Stack<Cell> path = new Stack<Cell>();
 
     /**
      * Constructor for a Maze, without specifying the cells.
@@ -279,8 +258,8 @@ public class Maze implements Serializable {
 
                 // Check for horizontal connection to the next cell
                 if (x < width) {
-                    boolean eastConn = hasConnection(x, y, Direction.EAST);
-                    boolean westConn = hasConnection(x + 1, y, Direction.WEST);
+                    boolean eastConn = hasConnection(x, y, Direction.LEFT);
+                    boolean westConn = hasConnection(x + 1, y, Direction.RIGHT);
 
                     if (eastConn && westConn) {
                         cellRow.append('-');
@@ -300,8 +279,8 @@ public class Maze implements Serializable {
                 StringBuilder connRow = new StringBuilder();
                 for (int x = 0; x <= width; x++) {
                     // Check for vertical connection to the cell below
-                    boolean southConn = hasConnection(x, y, Direction.SOUTH);
-                    boolean northConn = hasConnection(x, y - 1, Direction.NORTH);
+                    boolean southConn = hasConnection(x, y, Direction.DOWN);
+                    boolean northConn = hasConnection(x, y - 1, Direction.UP);
 
                     if (southConn && northConn) {
                         connRow.append('|');
@@ -384,5 +363,92 @@ public class Maze implements Serializable {
             }
         }
         return null;
+    }
+
+    /**
+     * HashCode implementation for the maze.
+     *
+     * @return the hashcode of the maze
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((width == null) ? 0 : width.hashCode());
+        result = prime * result + ((height == null) ? 0 : height.hashCode());
+        result = prime * result + Arrays.deepHashCode(cells);
+        result = prime * result + ((adjacencyList == null) ? 0 : adjacencyList.hashCode());
+        return result;
+    }
+
+    /**
+     * Equals implementation for the Maze.
+     *
+     * @param obj the object to compare to
+     * @return true if the objects are equivalent, false otherwise.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Maze other = (Maze) obj;
+        if (width == null) {
+            if (other.width != null)
+                return false;
+        } else if (!width.equals(other.width))
+            return false;
+        if (height == null) {
+            if (other.height != null)
+                return false;
+        } else if (!height.equals(other.height))
+            return false;
+        if (!Arrays.deepEquals(cells, other.cells))
+            return false;
+        if (adjacencyList == null) {
+            if (other.adjacencyList != null)
+                return false;
+        } else if (!adjacencyList.equals(other.adjacencyList))
+            return false;
+        return true;
+    }
+
+    /**
+     * Get the width of the maze.
+     *
+     * @return the width of the maze
+     */
+    public Integer getWidth() {
+        return width;
+    }
+
+    /**
+     * Get the height of the maze.
+     *
+     * @return the height of the maze
+     */
+    public Integer getHeight() {
+        return height;
+    }
+
+    /**
+     * Get the cells of the maze.
+     *
+     * @return the cells of the maze
+     */
+    public Cell[][] getCells() {
+        return cells;
+    }
+
+    /**
+     * Get the adjacency list of the maze.
+     *
+     * @return the adjacency list of the maze
+     */
+    public AdjacencyList getAdjacencyList() {
+        return adjacencyList;
     }
 }

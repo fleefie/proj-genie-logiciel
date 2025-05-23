@@ -23,6 +23,11 @@ import java.io.IOException;
  */
 public class ApplicationMain extends Application {
 
+    /**
+     * Start method for the JavaFX application.
+     *
+     * @param primaryStage The primary stage for this application.
+     */
     @Override
     public void start(Stage primaryStage) {
         // Set the scene...

@@ -14,7 +14,6 @@ import fr.cytech.projetgenielogiciel.maze.Direction;
 import fr.cytech.projetgenielogiciel.maze.Maze;
 import fr.cytech.projetgenielogiciel.maze.Maze.Position;
 import javafx.scene.paint.Color;
-import lombok.Getter;
 
 /**
  * Implements a perfect maze builder using a DFS algorithm.
@@ -29,7 +28,6 @@ public class DfsBuilder implements IBuilder {
     /**
      * Whether the builder is finished building.
      */
-    @Getter
     protected Boolean finished = false;
 
     /**
@@ -47,13 +45,11 @@ public class DfsBuilder implements IBuilder {
     /**
      * Random generator.
      */
-    @Getter
     private final Random rand;
 
     /**
      * Reference to the maze that the builder is working on
      */
-    @Getter
     protected final Maze maze;
 
     /**
@@ -137,10 +133,10 @@ public class DfsBuilder implements IBuilder {
         // If the current cell has valid neighbors, try moving to one of them
         if (hasValidTargets(currentCell)) {
             List<Direction> directions = new ArrayList<Direction>(Arrays.asList(
-                    Direction.NORTH,
-                    Direction.SOUTH,
-                    Direction.EAST,
-                    Direction.WEST));
+                    Direction.UP,
+                    Direction.DOWN,
+                    Direction.LEFT,
+                    Direction.RIGHT));
             Collections.shuffle(directions, rand); // inefficient, but clean
 
             for (Direction direction : directions) {
@@ -196,5 +192,12 @@ public class DfsBuilder implements IBuilder {
                 || isValidTarget(new Position(cell.x() - 1, cell.y()))
                 || isValidTarget(new Position(cell.x(), cell.y() + 1))
                 || isValidTarget(new Position(cell.x(), cell.y() - 1)));
+    }
+
+    /**
+     * Read accessor for the maze.
+     */
+    public Maze getMaze() {
+        return this.maze;
     }
 }

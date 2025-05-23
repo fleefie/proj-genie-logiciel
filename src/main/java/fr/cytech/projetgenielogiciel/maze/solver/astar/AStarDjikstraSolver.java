@@ -7,12 +7,19 @@ import fr.cytech.projetgenielogiciel.maze.Maze;
  * A* implementation using Djikstra's heuristic.
  */
 public class AStarDjikstraSolver extends AStarSolver {
-    public AStarDjikstraSolver(Maze lab, Cell start, Cell end) {
-        super(lab, start, end, 0, 0);
+    /**
+     * Constructor for the A* solver using Djikstra's heuristic.
+     *
+     * @param maze  The maze to solve.
+     * @param start The starting cell.
+     * @param end   The ending cell.
+     */
+    public AStarDjikstraSolver(Maze maze, Cell start, Cell end) {
+        super(maze, start, end, 0, 0);
     }
 
     @Override
-    public Double heuristic(Cell c) {
+    protected Double heuristic(Cell c) {
         return 0.0;
     }
 }

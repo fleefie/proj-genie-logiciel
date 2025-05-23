@@ -10,8 +10,6 @@ import fr.cytech.projetgenielogiciel.maze.Cell;
 import fr.cytech.projetgenielogiciel.maze.Maze;
 import fr.cytech.projetgenielogiciel.maze.solver.ISolver;
 import javafx.scene.paint.Color;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Abstract class representing an A* solver.
@@ -23,8 +21,6 @@ public abstract class AStarSolver implements ISolver {
     /**
      * Reference to the maze that the solver is using.
      */
-    @Getter
-    @Setter
     protected Maze maze;
 
     /**
@@ -280,7 +276,6 @@ public abstract class AStarSolver implements ISolver {
      *
      * @return true when it's finished and false if it's not
      */
-
     public Boolean isFinished() {
         return solved;
     }
@@ -291,6 +286,12 @@ public abstract class AStarSolver implements ISolver {
      * @param c the cell on which the heuristic is based
      * @return the computed weight.
      */
-    public abstract Double heuristic(Cell c);
+    protected abstract Double heuristic(Cell c);
 
+    /**
+     * Read accessor for the maze.
+     */
+    public Maze getMaze() {
+        return maze;
+    }
 }

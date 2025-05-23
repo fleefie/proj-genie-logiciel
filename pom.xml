@@ -16,14 +16,6 @@
 
 <!-- Dependencies -->
 <dependencies>
-    <!-- JUnit 5, to actually run our tests -->
-    <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter</artifactId>
-        <version>5.12.2</version>
-        <scope>test</scope>
-    </dependency>
-
     <!-- JavaFX -->
     <dependency>
         <groupId>org.openjfx</groupId>
@@ -41,14 +33,6 @@
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-graphics</artifactId>
         <version>21.0.7</version>
-    </dependency>
-
-
-    <!-- This prevents me from going insane -->
-    <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-        <version>1.18.38</version>
     </dependency>
 
     <!-- SLF4J, with Log4j as the implementation -->
@@ -71,10 +55,8 @@
     <directory>${project.basedir}/target</directory>
     <outputDirectory>${project.build.directory}/classes</outputDirectory>
     <finalName>${project.artifactId}-${project.version}</finalName>
-    <testOutputDirectory>${project.build.directory}/test-classes</testOutputDirectory>
     <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
     <scriptSourceDirectory>${project.basedir}/src/main/scripts</scriptSourceDirectory>
-    <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
 
     <!-- Resources will be packaged in the JAR, under the META-INF directory, I think. -->
     <resources>
@@ -82,11 +64,6 @@
             <directory>${project.basedir}/src/main/resources</directory>
         </resource>
     </resources>
-
-    <testResources>
-        <testResource> <directory>${project.basedir}/src/test/resources</directory>
-        </testResource>
-    </testResources>
 
     <plugins>
         <!-- I love you Java 21 <3 -->
@@ -165,22 +142,7 @@
             </configuration>
         </plugin>
 
-        <!-- Run tests -->
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <version>3.1.2</version>
-            <executions>
-                <execution>
-                    <goals>
-                        <goal>test</goal>
-                    </goals>
-                    <phase>test</phase>
-                </execution>
-            </executions>
-        </plugin>
-
-        <!-- JavaFX plugin, used for a few things -->
+        <!-- JavaFX plugin, used for a *few* things -->
         <plugin>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-maven-plugin</artifactId>
@@ -189,7 +151,6 @@
                 <mainClass>fr.cytech.projetgenielogiciel.ui.ApplicationMain</mainClass>
             </configuration>
         </plugin>
-
     </plugins>
 </build>
 </project>

@@ -5,32 +5,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
 /**
  * Class representing an adjacency list.
- * An adjacency list is a data structure used to represent a graph.
- * It represents this graph through only the edges between nodes.
- * Note that this is not a class to represent a full graph, this only
- * handles connections, not the contained data.
+ * This class is used to represent a graph.
  */
-/*
- * NOTE:
- * This class is final as to force composition and avoid the
- * horrible anti-pattern of inheritance from an individual component of another
- * class.
- * Please do not do this. It is a horrendous idea.
- * If you need to extend this class, please don't. You're already doing
- * something wrong.
- * Classes meant as components for another class should be composed, always.
- */
-
-@NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public final class AdjacencyList implements Serializable {
-    @EqualsAndHashCode.Include
     private final Map<Integer, List<Integer>> adjacencyList = new HashMap<>();
+
+    /**
+     * Constructor for the AdjacencyList class.
+     */
+    public AdjacencyList() {
+    }
 
     /**
      * Adds an edge to the adjacency list.
@@ -125,5 +111,50 @@ public final class AdjacencyList implements Serializable {
         }
         sb.append("}");
         return sb.toString();
+    }
+
+    /**
+     * HashCode method for the adjacency list.
+     *
+     * @return the hash code of the adjacency list
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((adjacencyList == null) ? 0 : adjacencyList.hashCode());
+        return result;
+    }
+
+    /**
+     * Equals method for the adjacency list.
+     *
+     * @param obj the object to compare
+     * @return true if equal, false otherwise
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        AdjacencyList other = (AdjacencyList) obj;
+        if (adjacencyList == null) {
+            if (other.adjacencyList != null)
+                return false;
+        } else if (!adjacencyList.equals(other.adjacencyList))
+            return false;
+        return true;
+    }
+
+    /**
+     * Gets the adjacency list.
+     *
+     * @return the adjacency list
+     */
+    public Map<Integer, List<Integer>> getAdjacencyList() {
+        return adjacencyList;
     }
 }

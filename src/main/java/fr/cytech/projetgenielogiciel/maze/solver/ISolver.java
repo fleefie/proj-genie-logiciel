@@ -5,6 +5,12 @@ import java.util.Iterator;
 
 import fr.cytech.projetgenielogiciel.maze.Maze;
 
+/**
+ * Interface defining a maze solver.
+ * A maze solver is not a constructor, rather,
+ * it solves a valid maze, depending on the implementation.
+ * See: AStarSolver and DijkstraSolver.
+ */
 public interface ISolver extends Iterable<Boolean>, Serializable {
     /**
      * Runs a single step of the solving process.

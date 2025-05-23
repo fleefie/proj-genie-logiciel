@@ -230,29 +230,29 @@ public class MazeView extends Pane {
              * The fact that there is no way to make this any more succint
              * fills me with intense rage.
              */
-            walls.get(Direction.NORTH).setStartX(0);
-            walls.get(Direction.NORTH).setStartY(0);
-            walls.get(Direction.NORTH).setEndX(cellSize);
-            walls.get(Direction.NORTH).setEndY(0);
-            walls.get(Direction.NORTH).setVisible(!maze.hasConnection(x, y, Direction.NORTH));
+            walls.get(Direction.UP).setStartX(0);
+            walls.get(Direction.UP).setStartY(0);
+            walls.get(Direction.UP).setEndX(cellSize);
+            walls.get(Direction.UP).setEndY(0);
+            walls.get(Direction.UP).setVisible(!maze.hasConnection(x, y, Direction.UP));
 
-            walls.get(Direction.SOUTH).setStartX(0);
-            walls.get(Direction.SOUTH).setStartY(cellSize);
-            walls.get(Direction.SOUTH).setEndX(cellSize);
-            walls.get(Direction.SOUTH).setEndY(cellSize);
-            walls.get(Direction.SOUTH).setVisible(!maze.hasConnection(x, y, Direction.SOUTH));
+            walls.get(Direction.DOWN).setStartX(0);
+            walls.get(Direction.DOWN).setStartY(cellSize);
+            walls.get(Direction.DOWN).setEndX(cellSize);
+            walls.get(Direction.DOWN).setEndY(cellSize);
+            walls.get(Direction.DOWN).setVisible(!maze.hasConnection(x, y, Direction.DOWN));
 
-            walls.get(Direction.EAST).setStartX(cellSize);
-            walls.get(Direction.EAST).setStartY(0);
-            walls.get(Direction.EAST).setEndX(cellSize);
-            walls.get(Direction.EAST).setEndY(cellSize);
-            walls.get(Direction.EAST).setVisible(!maze.hasConnection(x, y, Direction.EAST));
+            walls.get(Direction.LEFT).setStartX(cellSize);
+            walls.get(Direction.LEFT).setStartY(0);
+            walls.get(Direction.LEFT).setEndX(cellSize);
+            walls.get(Direction.LEFT).setEndY(cellSize);
+            walls.get(Direction.LEFT).setVisible(!maze.hasConnection(x, y, Direction.LEFT));
 
-            walls.get(Direction.WEST).setStartX(0);
-            walls.get(Direction.WEST).setStartY(0);
-            walls.get(Direction.WEST).setEndX(0);
-            walls.get(Direction.WEST).setEndY(cellSize);
-            walls.get(Direction.WEST).setVisible(!maze.hasConnection(x, y, Direction.WEST));
+            walls.get(Direction.RIGHT).setStartX(0);
+            walls.get(Direction.RIGHT).setStartY(0);
+            walls.get(Direction.RIGHT).setEndX(0);
+            walls.get(Direction.RIGHT).setEndY(cellSize);
+            walls.get(Direction.RIGHT).setVisible(!maze.hasConnection(x, y, Direction.RIGHT));
         }
     }
 }

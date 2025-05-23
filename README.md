@@ -8,8 +8,7 @@ Directory structure:
 proj-genie-logiciel
 ├── doc (Extra documentation)
 ├── src (Source)
-│   ├── main (Main source code)
-│   └── test (Test source code)
+│   └── main (Main source code)
 ├── target (Output)
 │   ├── proj-genie-logiciel-VERSION.jar
 │   └── javadoc (Generated documentation)
@@ -22,7 +21,11 @@ Compilation dependencies:
 
 Development dependencies:
 - Java 21 (Full JDK)
-- Lombok 1.18.38
+
+Runtime dependenvies:
+- Java 21 (JRE)
+- JavaFX 21.0.7 (if using the jar)
+
 
 ## Compilation instructions
 ```sh
@@ -35,7 +38,7 @@ Development dependencies:
 # build
 ./mvnw package
 # run
-./mvnw compile exec:java 
+./mvnw compile javafx:run
 # Generate docs
 ./mvnw javadoc:javadoc
 ```

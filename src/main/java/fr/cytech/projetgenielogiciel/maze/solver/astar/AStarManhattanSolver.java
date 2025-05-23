@@ -8,12 +8,21 @@ import fr.cytech.projetgenielogiciel.maze.Maze.Position;
  * A* implementation using the Manhattan distance as a heuristic.
  */
 public class AStarManhattanSolver extends AStarSolver {
-    public AStarManhattanSolver(Maze lab, Cell start, Cell end, double distanceFactor, double heuristicFactor) {
-        super(lab, start, end, distanceFactor, heuristicFactor);
+    /**
+     * Constructor for the A* solver using the Manhattan distance heuristic.
+     *
+     * @param maze            The maze to solve.
+     * @param start           The starting cell.
+     * @param end             The ending cell.
+     * @param distanceFactor  The distance factor for the heuristic.
+     * @param heuristicFactor The heuristic factor for the heuristic.
+     */
+    public AStarManhattanSolver(Maze maze, Cell start, Cell end, double distanceFactor, double heuristicFactor) {
+        super(maze, start, end, distanceFactor, heuristicFactor);
     }
 
     @Override
-    public Double heuristic(Cell c) {
+    protected Double heuristic(Cell c) {
         Position startCoords = this.maze.findCoordinates(start);
         Position endCoords = this.maze.findCoordinates(end);
         Position currentCoords = this.maze.findCoordinates(c);

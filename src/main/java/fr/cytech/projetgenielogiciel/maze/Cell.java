@@ -1,24 +1,16 @@
 package fr.cytech.projetgenielogiciel.maze;
 
 import javafx.scene.paint.Color;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 import java.io.Serializable;
 
 /**
  * Class representing a cell in a maze.
  */
-@ToString
-@NoArgsConstructor
 public class Cell implements Serializable {
     /**
      * The number of cells created.
      */
-    @Getter
-    @Setter
     static private Integer totalCellCount = 0;
 
     /**
@@ -70,9 +62,13 @@ public class Cell implements Serializable {
     /**
      * The ID of the cell.
      */
-    @Getter
     private final Integer id = totalCellCount++;
 
+    /**
+     * HashCode method for the Cell class.
+     *
+     * @return the hash code of the cell
+     */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -81,6 +77,12 @@ public class Cell implements Serializable {
         return result;
     }
 
+    /**
+     * Equals method for the Cell class.
+     *
+     * @param obj the object to compare
+     * @return true if equal, false otherwise
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -108,11 +110,67 @@ public class Cell implements Serializable {
         return true;
     }
 
+    /**
+     * Private enum representing the state of the cell.
+     */
     private enum State {
+        /**
+         * The cell is unprocessed.
+         */
         UNPROCESSED,
+        /**
+         * The cell is processed.
+         */
         PROCESSED,
+        /**
+         * The cell is currently being processed.
+         */
         CURRENT,
+        /**
+         * The cell is part of the path.
+         */
         IN_PATH,
+        /**
+         * The cell is queued for processing.
+         */
         QUEUED;
+    }
+
+    /**
+     * toString method for the Cell class.
+     *
+     * @return a string representation of the cell
+     */
+    @Override
+    public String toString() {
+        return "Cell [state=" + state + ", id=" + id + "]";
+    }
+
+    /**
+     * Gets the ID of the cell.
+     *
+     * @return the ID of the cell
+     */
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     * Gets the total number of cells created.
+     *
+     * @return the total number of cells
+     */
+    public static Integer getTotalCellCount() {
+        return totalCellCount;
+    }
+
+    /**
+     * Sets the total number of cells created.
+     * Please only use this method if you know what you're doing.
+     *
+     * @param totalCellCount the new total number of cells
+     */
+    public static void setTotalCellCount(Integer totalCellCount) {
+        Cell.totalCellCount = totalCellCount;
     }
 }

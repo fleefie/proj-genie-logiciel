@@ -5,7 +5,6 @@ import java.util.Random;
 
 import fr.cytech.projetgenielogiciel.maze.Maze;
 import javafx.scene.paint.Color;
-import lombok.Getter;
 
 /**
  * Maze builder using Eller's set theory based algorithm.
@@ -32,11 +31,29 @@ import lombok.Getter;
  */
 public class EllerBuilder implements IBuilder {
 
+    /**
+     * Whether the maze is finished.
+     */
     private Boolean finished;
-    @Getter
+
+    /**
+     * The maze being worked on.
+     */
     private final Maze maze;
+
+    /**
+     * The source of RNG for the builder
+     */
     private final Random rand;
 
+    /**
+     * Constructor for the EllerBuilder.
+     *
+     * @param maze   the maze to build.
+     * @param startx the starting X position.
+     * @param starty the starting Y position.
+     * @param seed   the seed for the RNG
+     */
     public EllerBuilder(Maze maze, Integer startx, Integer starty, Integer seed) {
         this.maze = maze;
         this.maze.getCell(startx, starty).setColor(Color.RED);
@@ -47,8 +64,8 @@ public class EllerBuilder implements IBuilder {
 
     @Override
     public Boolean step() {
-        return null;
-        // TODO: Actually make this lol
+        return false;
+        // TODO
     }
 
     @Override
@@ -79,5 +96,14 @@ public class EllerBuilder implements IBuilder {
         public Boolean next() {
             return step();
         }
+    }
+
+    /**
+     * Get the maze of the builder.
+     *
+     * @return the maze.
+     */
+    public Maze getMaze() {
+        return this.maze;
     }
 }

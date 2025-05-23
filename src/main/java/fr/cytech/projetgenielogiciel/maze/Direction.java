@@ -13,7 +13,22 @@ package fr.cytech.projetgenielogiciel.maze;
  */
 // It made more sense to me to use this basis :-)
 public enum Direction {
-    NORTH, EAST, SOUTH, WEST;
+    /**
+     * Up direction.
+     */
+    UP,
+    /**
+     * Left direction.
+     */
+    LEFT,
+    /**
+     * Down direction.
+     */
+    DOWN,
+    /**
+     * Right direction.
+     */
+    RIGHT;
 
     /**
      * Get the opposite direction.
@@ -22,10 +37,10 @@ public enum Direction {
      */
     public Direction opposite() {
         return switch (this) {
-            case NORTH -> SOUTH;
-            case SOUTH -> NORTH;
-            case EAST -> WEST;
-            case WEST -> EAST;
+            case UP -> DOWN;
+            case DOWN -> UP;
+            case LEFT -> RIGHT;
+            case RIGHT -> LEFT;
         };
     }
 
@@ -34,10 +49,10 @@ public enum Direction {
      */
     public int getX() {
         return switch (this) {
-            case NORTH -> 0;
-            case SOUTH -> 0;
-            case EAST -> 1;
-            case WEST -> -1;
+            case UP -> 0;
+            case DOWN -> 0;
+            case LEFT -> 1;
+            case RIGHT -> -1;
         };
     }
 
@@ -46,10 +61,10 @@ public enum Direction {
      */
     public int getY() {
         return switch (this) {
-            case NORTH -> 1;
-            case SOUTH -> -1;
-            case EAST -> 0;
-            case WEST -> 0;
+            case UP -> 1;
+            case DOWN -> -1;
+            case LEFT -> 0;
+            case RIGHT -> 0;
         };
     }
 
@@ -64,13 +79,13 @@ public enum Direction {
             throw new IllegalArgumentException("A direction may only contain unit vectors");
 
         if (x == 1)
-            return Direction.EAST;
+            return Direction.LEFT;
         if (x == -1)
-            return Direction.WEST;
+            return Direction.RIGHT;
         if (y == 1)
-            return Direction.NORTH;
+            return Direction.UP;
         if (y == -1)
-            return Direction.SOUTH;
+            return Direction.DOWN;
 
         throw new IllegalArgumentException("Bad direction vector arguments");
     }

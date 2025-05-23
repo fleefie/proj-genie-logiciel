@@ -74,7 +74,7 @@ public class ImperfectDfsBuilder extends DfsBuilder {
         // Phase 1: Imperfection phase
         if (super.finished == false) {
             if (rand.nextDouble() < wallOpenProbability) {
-                List<Direction> dirs = Arrays.asList(Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
+                List<Direction> dirs = Arrays.asList(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT);
                 Collections.shuffle(dirs, rand);
                 Direction d = dirs.get(0);
                 Integer nx = currentX + d.getX();

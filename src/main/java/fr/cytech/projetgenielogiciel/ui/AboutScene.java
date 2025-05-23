@@ -14,6 +14,11 @@ import javafx.stage.Stage;
  * About scene, for all of the stuff we wanted to share.
  */
 public class AboutScene {
+    /**
+     * Constructor for the AboutScene.
+     *
+     * @param stage The stage to set the scene on.
+     */
     public AboutScene(Stage stage) {
         // Set the scene...
         BorderPane root = new BorderPane();
@@ -48,7 +53,7 @@ public class AboutScene {
                         "\n - Green refers to the currently chosen path (for solving)." +
                         "\n - Yellow refers to a cell that is queued for processing." +
                         "\n\n" +
-                        "CYnapse was built with Java 21, Maven, JavaFX, and a little bit of Lombok to spice up our lives."
+                        "CYnapse was built with Java 21, Maven, JavaFX, and a little bit of Lombok to spice up our lives during development."
                         +
                         "\n\n" +
                         "CYnapse is an assignment by the teachers of CY Tech. " +

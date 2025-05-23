@@ -15,7 +15,6 @@ import fr.cytech.projetgenielogiciel.maze.Direction;
 import fr.cytech.projetgenielogiciel.maze.Maze;
 import fr.cytech.projetgenielogiciel.maze.Maze.Position;
 import javafx.scene.paint.Color;
-import lombok.Getter;
 
 /**
  * Implements a perfect maze builder using a BFS algorithm.
@@ -45,13 +44,11 @@ public class BfsBuilder implements IBuilder {
     /**
      * Random generator.
      */
-    @Getter
     private final Random rand;
 
     /**
      * Reference to the maze that the builder is working on
      */
-    @Getter
     protected final Maze maze;
 
     /**
@@ -145,10 +142,10 @@ public class BfsBuilder implements IBuilder {
 
         // Check all valid neighbors and add them to the queue
         List<Direction> directions = new ArrayList<>(Arrays.asList(
-                Direction.NORTH,
-                Direction.SOUTH,
-                Direction.EAST,
-                Direction.WEST));
+                Direction.UP,
+                Direction.DOWN,
+                Direction.LEFT,
+                Direction.RIGHT));
         Collections.shuffle(directions, rand);
 
         for (Direction direction : directions) {
@@ -177,5 +174,13 @@ public class BfsBuilder implements IBuilder {
         return (target.x() >= 0 && target.x() <= maze.getWidth()
                 && target.y() >= 0 && target.y() <= maze.getHeight()
                 && !visited.contains(target));
+    }
+
+    /**
+     * Read accessor for the maze.
+     */
+    @Override
+    public Maze getMaze() {
+        return maze;
     }
 }
