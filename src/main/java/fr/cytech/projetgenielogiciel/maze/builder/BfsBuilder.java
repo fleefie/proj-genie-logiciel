@@ -1,5 +1,6 @@
 package fr.cytech.projetgenielogiciel.maze.builder;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -20,7 +21,7 @@ import lombok.Getter;
 /**
  * Implements a perfect maze builder using a BFS algorithm.
  */
-public class BfsBuilder implements IBuilder {
+public class BfsBuilder implements IBuilder, Serializable {
 
     /**
      * Holds the set of cells that were visited.

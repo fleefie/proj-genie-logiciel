@@ -1,5 +1,6 @@
 package fr.cytech.projetgenielogiciel.ui;
 
+import fr.cytech.projetgenielogiciel.Serialiseur;
 import fr.cytech.projetgenielogiciel.maze.Maze;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -7,7 +8,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import javax.swing.*;
+import java.io.IOException;
 
 /**
  * Scene to display the maze view and some buttons.
@@ -65,7 +70,20 @@ public class MazeDisplayScene {
 
         // Save the maze
         save.setOnAction(e -> {
-            /* TODO */
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Load maze from file...");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Text Files", "*.ser")
+            );
+            fileChooser.setSelectedExtensionFilter(fileChooser.getExtensionFilters().get(0));
+            String path = fileChooser.showSaveDialog(stage).getAbsolutePath();
+            try {
+                Serialiseur.serialiser(maze, path);
+                JOptionPane.showMessageDialog(null, "Fichier sauvegardé : " + path);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Erreur : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+
         });
 
         // Go to the solver scene with this maze

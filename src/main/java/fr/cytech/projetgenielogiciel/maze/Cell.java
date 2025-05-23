@@ -6,12 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 /**
  * Class representing a cell in a maze.
  */
 @ToString
 @NoArgsConstructor
-public class Cell {
+public class Cell implements Serializable {
     /**
      * The number of cells created.
      */

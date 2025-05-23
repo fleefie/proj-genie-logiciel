@@ -1,5 +1,7 @@
 package fr.cytech.projetgenielogiciel.maze.builder;
 
+import fr.cytech.projetgenielogiciel.Serialiseur;
+
 import java.util.Iterator;
 
 /**

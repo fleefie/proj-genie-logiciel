@@ -1,5 +1,6 @@
 package fr.cytech.projetgenielogiciel.maze.builder;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -36,7 +37,7 @@ import javafx.scene.paint.Color;
  * always connecting to the next cell if it's in a different set. Don't make any
  * downward connections.
  */
-public class EllerBuilder implements IBuilder {
+public class EllerBuilder implements IBuilder, Serializable {
 
     private Boolean finished;
     private final Maze maze;

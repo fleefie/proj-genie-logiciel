@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Stack;
 
@@ -15,7 +16,7 @@ import javafx.scene.paint.Color;
  * A maze is a 2D grid of cells, made out of cells.
  */
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Maze {
+public class Maze implements Serializable {
     /**
      * The width of the maze.
      */

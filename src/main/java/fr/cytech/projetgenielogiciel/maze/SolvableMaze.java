@@ -1,5 +1,6 @@
 package fr.cytech.projetgenielogiciel.maze;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
 import fr.cytech.projetgenielogiciel.maze.builder.IBuilder;
@@ -11,7 +12,7 @@ import lombok.Getter;
  * Class representing a Maze along a building and solving strategy.
  */
 @AllArgsConstructor
-public class SolvableMaze {
+public class SolvableMaze implements Serializable {
     /**
      * The maze to be built and solved.
      */
