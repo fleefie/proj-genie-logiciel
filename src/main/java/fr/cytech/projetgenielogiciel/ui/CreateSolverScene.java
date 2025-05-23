@@ -176,19 +176,19 @@ public class CreateSolverScene {
             try {
 
                 Integer sx = Integer.parseInt(startX.getText());
-                if (0 < sx && sx < maze.getWidth() - 1)
+                if (!(0 < sx && sx < maze.getWidth() - 1))
                     throw new IllegalArgumentException();
 
                 Integer sy = Integer.parseInt(startY.getText());
-                if (0 < sy && sy < maze.getHeight() - 1)
+                if (!(0 < sy && sy < maze.getHeight() - 1))
                     throw new IllegalArgumentException();
 
                 Integer ex = Integer.parseInt(endX.getText());
-                if (0 < ex && ex < maze.getWidth() - 1)
+                if (!(0 < ex && ex < maze.getWidth() - 1))
                     throw new IllegalArgumentException();
 
                 Integer ey = Integer.parseInt(endY.getText());
-                if (0 < ey && ey < maze.getHeight() - 1)
+                if (!(0 < ey && ey < maze.getHeight() - 1))
                     throw new IllegalArgumentException();
 
                 Double dw = Double.parseDouble(astar_distanceFactor.getText());
