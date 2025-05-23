@@ -15,6 +15,7 @@ import fr.cytech.projetgenielogiciel.maze.Direction;
 import fr.cytech.projetgenielogiciel.maze.Maze;
 import fr.cytech.projetgenielogiciel.maze.Maze.Position;
 import javafx.scene.paint.Color;
+import lombok.Getter;
 
 /**
  * Implements a perfect maze builder using a BFS algorithm.
@@ -44,12 +45,13 @@ public class BfsBuilder implements IBuilder {
     /**
      * Random generator.
      */
+    @Getter
     private final Random rand;
 
     /**
      * Reference to the maze that the builder is working on
      */
-    private final Maze maze;
+    protected final Maze maze;
 
     /**
      * Constructor.
@@ -170,7 +172,7 @@ public class BfsBuilder implements IBuilder {
      * 
      * @param target the position of the target cell.
      */
-    private Boolean isValidTarget(Position target) {
+    protected Boolean isValidTarget(Position target) {
         return (target.x() >= 0 && target.x() <= maze.getWidth()
                 && target.y() >= 0 && target.y() <= maze.getHeight()
                 && !visited.contains(target));
