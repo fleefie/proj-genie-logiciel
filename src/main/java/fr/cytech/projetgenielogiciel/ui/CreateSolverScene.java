@@ -76,23 +76,23 @@ public class CreateSolverScene {
 
         // Starting position
         TextField startX = new TextField();
-        startX.setPromptText("Start X position");
+        startX.setPromptText("Start X position [Integer]");
         TextField startY = new TextField();
-        startY.setPromptText("Start Y position");
+        startY.setPromptText("Start Y position [Integer]");
 
         // End position
         TextField endX = new TextField();
-        endX.setPromptText("End X position");
+        endX.setPromptText("End X position [Integer]");
         TextField endY = new TextField();
-        endY.setPromptText("End Y position");
+        endY.setPromptText("End Y position [Integer]");
 
         // A* distance weight
         TextField astar_distanceFactor = new TextField();
-        astar_distanceFactor.setPromptText("Distance Weight");
+        astar_distanceFactor.setPromptText("Distance Weight [Decimal]");
 
         // A* heuristic weight
         TextField astar_heuristicFactor = new TextField();
-        astar_heuristicFactor.setPromptText("Heuristic Weight");
+        astar_heuristicFactor.setPromptText("Heuristic Weight [Decimal]");
 
         /*
          * ALGORITHM PARAMS DISPLAY
@@ -176,28 +176,23 @@ public class CreateSolverScene {
             try {
 
                 Integer sx = Integer.parseInt(startX.getText());
-                if (!(0 < sx && sx < maze.getWidth() - 1))
+                if (!(0 <= sx && sx <= maze.getWidth()))
                     throw new IllegalArgumentException();
 
                 Integer sy = Integer.parseInt(startY.getText());
-                if (!(0 < sy && sy < maze.getHeight() - 1))
+                if (!(0 <= sy && sy <= maze.getHeight()))
                     throw new IllegalArgumentException();
 
                 Integer ex = Integer.parseInt(endX.getText());
-                if (!(0 < ex && ex < maze.getWidth() - 1))
+                if (!(0 <= ex && ex <= maze.getWidth()))
                     throw new IllegalArgumentException();
 
                 Integer ey = Integer.parseInt(endY.getText());
-                if (!(0 < ey && ey < maze.getHeight() - 1))
+                if (!(0 <= ey && ey <= maze.getHeight()))
                     throw new IllegalArgumentException();
 
-                Double dw = Double.parseDouble(astar_distanceFactor.getText());
-                if (dw < 0)
-                    throw new IllegalArgumentException();
-
-                Double dh = Double.parseDouble(astar_heuristicFactor.getText());
-                if (dh < 0)
-                    throw new IllegalArgumentException();
+                Double dw = 0.0d;
+                Double dh = 0.0d;
 
                 // It should now be safe to do this?
                 Cell start = maze.getCell(sx, sy);
@@ -210,13 +205,29 @@ public class CreateSolverScene {
                     case "Tremaux":
                         solver = new TremauxSolver(maze, start, end);
                         break;
-                    case "A* Dijkstra":
+                    case "Dijkstra":
                         solver = new AStarDjikstraSolver(maze, start, end);
                         break;
                     case "A* Euclidean":
+                        dw = Double.parseDouble(astar_distanceFactor.getText());
+                        if (dw < 0)
+                            throw new IllegalArgumentException();
+
+                        dh = Double.parseDouble(astar_heuristicFactor.getText());
+                        if (dh < 0)
+                            throw new IllegalArgumentException();
+
                         solver = new AStarEuclideanSolver(maze, start, end, dw, dh);
                         break;
                     case "A* Manhattan":
+                        dw = Double.parseDouble(astar_distanceFactor.getText());
+                        if (dw < 0)
+                            throw new IllegalArgumentException();
+
+                        dh = Double.parseDouble(astar_heuristicFactor.getText());
+                        if (dh < 0)
+                            throw new IllegalArgumentException();
+
                         solver = new AStarManhattanSolver(maze, start, end, dw, dh);
                         break;
                 }

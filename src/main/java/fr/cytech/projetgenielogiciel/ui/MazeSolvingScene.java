@@ -167,10 +167,18 @@ public class MazeSolvingScene {
         });
 
         // Go back to the solver setup screen
-        back.setOnAction(e -> new CreateSolverScene(stage, maze));
+        back.setOnAction(e -> {
+            if (animation != null)
+                animation.stop();
+            new CreateSolverScene(stage, maze);
+        });
 
         // End generation and go to the display scene
-        endGen.setOnAction(e -> new MazeDisplayScene(stage, maze));
+        endGen.setOnAction(e -> {
+            if (animation != null)
+                animation.stop();
+            new MazeDisplayScene(stage, maze);
+        });
     }
 
     /**

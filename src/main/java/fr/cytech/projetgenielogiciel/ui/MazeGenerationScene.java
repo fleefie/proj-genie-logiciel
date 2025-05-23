@@ -167,10 +167,18 @@ public class MazeGenerationScene {
         });
 
         // Go back to the generator setup scene
-        back.setOnAction(e -> new CreateGeneratorScene(stage));
+        back.setOnAction(e -> {
+            if (animation != null)
+                animation.stop();
+            new CreateGeneratorScene(stage);
+        });
 
         // End generation and go to the display scene
-        endGen.setOnAction(e -> new MazeDisplayScene(stage, maze));
+        endGen.setOnAction(e -> {
+            if (animation != null)
+                animation.stop();
+            new MazeDisplayScene(stage, maze);
+        });
     }
 
     /**

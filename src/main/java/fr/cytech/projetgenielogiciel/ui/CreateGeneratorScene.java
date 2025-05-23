@@ -55,19 +55,19 @@ public class CreateGeneratorScene {
 
         // Maze dimmensions
         TextField mazeWidth = new TextField();
-        mazeWidth.setPromptText("Maze Width");
+        mazeWidth.setPromptText("Maze Width [Integer]");
         TextField mazeHeight = new TextField();
-        mazeHeight.setPromptText("Maze Height");
+        mazeHeight.setPromptText("Maze Height [Integer]");
 
         // Starting position
         TextField startX = new TextField();
-        startX.setPromptText("Start X position");
+        startX.setPromptText("Start X position [Integer]");
         TextField startY = new TextField();
-        startY.setPromptText("Start Y position");
+        startY.setPromptText("Start Y position [Integer]");
 
         // Random seed
         TextField seed = new TextField();
-        seed.setPromptText("Seed");
+        seed.setPromptText("Seed [Integer]");
 
         /*
          * ALGORITHM PARAMS DISPLAY
