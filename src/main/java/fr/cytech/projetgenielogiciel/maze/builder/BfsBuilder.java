@@ -51,6 +51,7 @@ public class BfsBuilder implements IBuilder {
     /**
      * Reference to the maze that the builder is working on
      */
+    @Getter
     protected final Maze maze;
 
     /**

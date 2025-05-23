@@ -1,13 +1,18 @@
 package fr.cytech.projetgenielogiciel.ui;
 
+import fr.cytech.projetgenielogiciel.Serializer;
 import fr.cytech.projetgenielogiciel.maze.Maze;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 /**
  * Scene to display the maze view and some buttons.
@@ -60,12 +65,57 @@ public class MazeDisplayScene {
 
         // Load a maze
         load.setOnAction(e -> {
-            /* TODO */
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Load maze from file...");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Text Files", "*.ser"));
+            fileChooser.setSelectedExtensionFilter(fileChooser.getExtensionFilters().get(0));
+            try {
+
+                String path = fileChooser.showOpenDialog(stage).getAbsolutePath();
+                Maze loadedMaze = Serializer.deserialize(path, Maze.class);
+
+                new MazeDisplayScene(stage, loadedMaze);
+            } catch (IOException | ClassNotFoundException ex) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Failed to load maze");
+                errorAlert.setContentText(ex.getMessage());
+                errorAlert.showAndWait();
+            } catch (NullPointerException ex) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Failed to load maze");
+                errorAlert.setContentText("No file selected.");
+                errorAlert.showAndWait();
+            }
         });
 
         // Save the maze
         save.setOnAction(e -> {
-            /* TODO */
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Load maze from file...");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Text Files", "*.ser"));
+            fileChooser.setSelectedExtensionFilter(fileChooser.getExtensionFilters().get(0));
+            try {
+
+                String path = fileChooser.showSaveDialog(stage).getAbsolutePath();
+                Serializer.serialize(maze, path);
+            } catch (IOException ex) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Failed to save maze");
+                errorAlert.setContentText(ex.getMessage());
+                errorAlert.showAndWait();
+            } catch (NullPointerException ex) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Failed to save maze");
+                errorAlert.setContentText("No file selected.");
+                errorAlert.showAndWait();
+            }
+
         });
 
         // Go to the solver scene with this maze

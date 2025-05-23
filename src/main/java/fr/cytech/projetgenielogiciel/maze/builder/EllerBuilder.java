@@ -1,17 +1,11 @@
 package fr.cytech.projetgenielogiciel.maze.builder;
 
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import java.util.stream.Collectors;
 
-import fr.cytech.projetgenielogiciel.maze.Cell;
-import fr.cytech.projetgenielogiciel.maze.Direction;
 import fr.cytech.projetgenielogiciel.maze.Maze;
-import fr.cytech.projetgenielogiciel.maze.Maze.Position;
 import javafx.scene.paint.Color;
+import lombok.Getter;
 
 /**
  * Maze builder using Eller's set theory based algorithm.
@@ -39,6 +33,7 @@ import javafx.scene.paint.Color;
 public class EllerBuilder implements IBuilder {
 
     private Boolean finished;
+    @Getter
     private final Maze maze;
     private final Random rand;
 

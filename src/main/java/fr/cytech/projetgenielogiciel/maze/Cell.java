@@ -6,12 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 /**
  * Class representing a cell in a maze.
  */
 @ToString
 @NoArgsConstructor
-public class Cell {
+public class Cell implements Serializable {
     /**
      * The number of cells created.
      */
@@ -20,11 +22,50 @@ public class Cell {
     static private Integer totalCellCount = 0;
 
     /**
-     * The color of the cell, used for various display needs
+     * The color of the cell, used for various display needs.
      */
-    @Getter
-    @Setter
-    private Color color = Color.WHITE;
+    private State state = State.UNPROCESSED;
+
+    /**
+     * Get the current color as a JavaFX Color
+     */
+    public Color getColor() {
+        return switch (state) {
+            case UNPROCESSED -> {
+                yield Color.WHITE;
+            }
+            case QUEUED -> {
+                yield Color.YELLOW;
+            }
+            case PROCESSED -> {
+                yield Color.BLUE;
+            }
+            case IN_PATH -> {
+                yield Color.GREEN;
+            }
+            case CURRENT -> {
+                yield Color.RED;
+            }
+        };
+    }
+
+    /**
+     * Set the color using a JavaFX Color
+     */
+    public void setColor(Color color) {
+        if (color.equals(Color.BLUE))
+            state = State.PROCESSED;
+        else if (color.equals(Color.RED))
+            state = State.CURRENT;
+        else if (color.equals(Color.WHITE))
+            state = State.UNPROCESSED;
+        else if (color.equals(Color.YELLOW))
+            state = State.QUEUED;
+        else if (color.equals(Color.GREEN))
+            state = State.IN_PATH;
+        else
+            state = State.UNPROCESSED;
+    }
 
     /**
      * The ID of the cell.
@@ -65,5 +106,13 @@ public class Cell {
      */
     public Boolean isValid() {
         return true;
+    }
+
+    private enum State {
+        UNPROCESSED,
+        PROCESSED,
+        CURRENT,
+        IN_PATH,
+        QUEUED;
     }
 }

@@ -1,5 +1,8 @@
 package fr.cytech.projetgenielogiciel.ui;
 
+import java.io.IOException;
+
+import fr.cytech.projetgenielogiciel.Serializer;
 import fr.cytech.projetgenielogiciel.maze.Cell;
 import fr.cytech.projetgenielogiciel.maze.Maze;
 import fr.cytech.projetgenielogiciel.maze.solver.ISolver;
@@ -19,6 +22,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 /**
@@ -65,7 +69,6 @@ public class CreateSolverScene {
 
         /*
          * Yes, this is ugly. No, I do not care.
-         * TODO: Make this prettier because I do care.
          *
          * It should be trivial to add in new solver types thanks to this structure.
          */
@@ -159,7 +162,30 @@ public class CreateSolverScene {
 
         // Load state
         load.setOnAction(e -> {
-            /* TODO */
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Load builder from file...");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Text Files", "*.ser"));
+            fileChooser.setSelectedExtensionFilter(fileChooser.getExtensionFilters().get(0));
+            try {
+
+                String path = fileChooser.showOpenDialog(stage).getAbsolutePath();
+                ISolver solver = Serializer.deserialize(path, ISolver.class);
+
+                new MazeSolvingScene(stage, solver.getMaze(), solver);
+            } catch (IOException | ClassNotFoundException ex) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Failed to load solver state.");
+                errorAlert.setContentText(ex.getMessage());
+                errorAlert.showAndWait();
+            } catch (NullPointerException ex) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Failed to load solver state.");
+                errorAlert.setContentText("No file selected.");
+                errorAlert.showAndWait();
+            }
         });
 
         // Create the solver

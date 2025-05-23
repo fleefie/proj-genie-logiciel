@@ -1,5 +1,6 @@
 package fr.cytech.projetgenielogiciel.maze;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public final class AdjacencyList {
+public final class AdjacencyList implements Serializable {
     @EqualsAndHashCode.Include
     private final Map<Integer, List<Integer>> adjacencyList = new HashMap<>();
 

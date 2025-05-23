@@ -53,6 +53,7 @@ public class DfsBuilder implements IBuilder {
     /**
      * Reference to the maze that the builder is working on
      */
+    @Getter
     protected final Maze maze;
 
     /**

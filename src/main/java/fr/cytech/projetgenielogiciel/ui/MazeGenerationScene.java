@@ -1,5 +1,8 @@
 package fr.cytech.projetgenielogiciel.ui;
 
+import java.io.IOException;
+
+import fr.cytech.projetgenielogiciel.Serializer;
 import fr.cytech.projetgenielogiciel.maze.Maze;
 import fr.cytech.projetgenielogiciel.maze.builder.IBuilder;
 import javafx.animation.KeyFrame;
@@ -7,11 +10,13 @@ import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -158,12 +163,56 @@ public class MazeGenerationScene {
 
         // Load a generator from a file
         load.setOnAction(e -> {
-            /* TODO */
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Load builder from file...");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Text Files", "*.ser"));
+            fileChooser.setSelectedExtensionFilter(fileChooser.getExtensionFilters().get(0));
+            try {
+
+                String path = fileChooser.showOpenDialog(stage).getAbsolutePath();
+                IBuilder localbuilder = Serializer.deserialize(path, IBuilder.class);
+
+                new MazeGenerationScene(stage, localbuilder.getMaze(), localbuilder);
+            } catch (IOException | ClassNotFoundException ex) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Failed to load builder state.");
+                errorAlert.setContentText(ex.getMessage());
+                errorAlert.showAndWait();
+            } catch (NullPointerException ex) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Failed to load builder state.");
+                errorAlert.setContentText("No file selected.");
+                errorAlert.showAndWait();
+            }
         });
 
         // Save a generator from a file
         save.setOnAction(e -> {
-            /* TODO */
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("save builder from file...");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Text Files", "*.ser"));
+            fileChooser.setSelectedExtensionFilter(fileChooser.getExtensionFilters().get(0));
+            try {
+
+                String path = fileChooser.showSaveDialog(stage).getAbsolutePath();
+                Serializer.serialize(builder, path);
+            } catch (IOException ex) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Failed to save builder state.");
+                errorAlert.setContentText(ex.getMessage());
+                errorAlert.showAndWait();
+            } catch (NullPointerException ex) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Failed to save builder state.");
+                errorAlert.setContentText("No file selected.");
+                errorAlert.showAndWait();
+            }
         });
 
         // Go back to the generator setup scene
